@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from . import views
 
@@ -30,6 +30,11 @@ urlpatterns = [
         "accounts/confirm-email/<str:key>/",
         views.confirm_email,
         name="account_confirm_email",
+    ),
+    re_path(
+        r"^accounts/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$",
+        views.password_reset_from_key,
+        name="account_reset_password_from_key",
     ),
     path("accounts/", include("allauth.urls")),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),

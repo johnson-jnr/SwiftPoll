@@ -10,10 +10,13 @@ from ipware import get_client_ip
 from polls.forms import PollForm, PollVoteForm
 from polls.models import Option, Poll, Vote
 from django.db.models import Count
-from allauth.account.forms import LoginForm, SignupForm
+from allauth.account.forms import LoginForm, ResetPasswordForm, ResetPasswordKeyForm, SignupForm, UserTokenForm
+from allauth.account.internal.flows import password_reset as password_reset_flows
 from allauth.account.models import EmailConfirmationHMAC
 from allauth.account.utils import complete_signup, perform_login
+from allauth.account.views import INTERNAL_RESET_SESSION_KEY
 from django.contrib.auth import logout
+from django.urls import reverse
 
 
 def home(request):
@@ -158,7 +161,61 @@ def confirm_email(request, key):
 
 
 def forgot_password(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        form = ResetPasswordForm(data)
+        if form.is_valid():
+            form.save(request)
+            return render(request, "ForgotPassword")
+        else:
+            errors = {
+                ("general" if k == "__all__" else k): "\n".join(v)
+                for k, v in form.errors.items()
+            }
+            return render(request, "ForgotPassword", {"errors": errors})
     return render(request, "ForgotPassword")
+
+
+RESET_URL_KEY = "set-password"
+
+
+def password_reset_from_key(request, uidb36, key):
+    if key != RESET_URL_KEY:
+        # First visit (real key in URL): validate, store in session, redirect
+        token_form = UserTokenForm(data={"uidb36": uidb36, "key": key})
+        if token_form.is_valid():
+            request.session[INTERNAL_RESET_SESSION_KEY] = key
+            return redirect(
+                reverse(
+                    "account_reset_password_from_key",
+                    kwargs={"uidb36": uidb36, "key": RESET_URL_KEY},
+                )
+            )
+        return render(request, "PasswordResetFromKey", {"token_fail": True})
+
+    # Second visit ("set-password" URL): read real key from session
+    real_key = request.session.get(INTERNAL_RESET_SESSION_KEY, "")
+    token_form = UserTokenForm(data={"uidb36": uidb36, "key": real_key})
+    if not real_key or not token_form.is_valid():
+        return render(request, "PasswordResetFromKey", {"token_fail": True})
+
+    reset_user = token_form.reset_user
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        form = ResetPasswordKeyForm(data, user=reset_user, temp_key=real_key)
+        if form.is_valid():
+            form.save()
+            password_reset_flows.finalize_password_reset(request, reset_user)
+            return redirect("login")
+        else:
+            errors = {
+                ("general" if k == "__all__" else k): "\n".join(v)
+                for k, v in form.errors.items()
+            }
+            return render(request, "PasswordResetFromKey", {"errors": errors})
+
+    return render(request, "PasswordResetFromKey")
 
 
 def signout(request):
