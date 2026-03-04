@@ -29,7 +29,10 @@ env.read_env(os.path.join(BASE_DIR, ".env"))
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY", default="django-insecure-3472^sitrt^-xx#!u-t_4bi2ac5&6^i8%0s9!3!zyy#uf#rq44")
+SECRET_KEY = env(
+    "SECRET_KEY",
+    default="django-insecure-3472^sitrt^-xx#!u-t_4bi2ac5&6^i8%0s9!3!zyy#uf#rq44",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=True)
@@ -47,12 +50,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "polls",
+    "accounts",
+    # Third party
     "django_vite",
     "inertia",
-    
     "allauth",
     "allauth.account",
-    
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -64,9 +70,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
     "allauth.account.middleware.AccountMiddleware",
-    
     "inertia.middleware.InertiaMiddleware",
     "simple-poll.middleware.DataShareMiddleware",
 ]
@@ -84,7 +88,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                
             ],
         },
     },
@@ -101,7 +104,6 @@ if "DATABASE_URL" in env:
 else:
     DATABASES = {
         "default": {
-            
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
             "OPTIONS": {
@@ -117,9 +119,8 @@ else:
                     PRAGMA cache_size = 2000;
                 """,
             },
-            
         }
-}
+    }
 
 
 # Password validation
@@ -140,19 +141,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "accounts.User"
+
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
-    
     # `allauth` specific authentication methods, such as login by email
     "allauth.account.auth_backends.AuthenticationBackend",
-    
 ]
 
 LOGIN_REDIRECT_URL = "/"
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
-
 
 
 # Internationalization
@@ -198,9 +198,11 @@ INERTIA_JSON_ENCODER = inertia_settings.INERTIA_JSON_ENCODER
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
 # http://whitenoise.evans.io/en/stable/django.html#WHITENOISE_IMMUTABLE_FILE_TEST
 def immutable_file_test(path, url):
     # Match vite (rollup)-generated hashes, à la, `some_file-CSliV9zW.js`
     return re.match(r"^.+[.-][0-9a-zA-Z_-]{8,12}\..+$", url)
+
 
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test

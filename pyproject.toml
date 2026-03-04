@@ -9,8 +9,8 @@ dependencies = [
     "django>=5.1.4",
     "django-vite>=3.0.5",
     "inertia-django>=0.6.0",
-    
-    "django-allauth>=65.11.2",
+    "django-allauth[socialaccount]>=65.11.2",
     "whitenoise>=6.8.2",
     "gunicorn>=23.0.0",
+    "nanoid>=2.0.0",
 ]

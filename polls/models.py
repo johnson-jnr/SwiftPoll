@@ -1,0 +1,41 @@
+from django.db import models
+from django.conf import settings
+from nanoid import generate
+
+
+def short_id():
+    return generate(size=12)
+
+
+class Poll(models.Model):
+    public_id = models.CharField(
+        max_length=12, unique=True, default=short_id, editable=False
+    )
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Option(models.Model):
+    text = models.CharField(max_length=200)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="options")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Vote(models.Model):
+    hashed_ip_address = models.CharField(max_length=64)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="votes")
+    voted_at = models.DateTimeField(auto_now_add=True)
+    option = models.ForeignKey(Option, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["poll", "hashed_ip_address"], name="unique_vote_per_ip"
+            )
+        ]
