@@ -1,8 +1,10 @@
 import { Link } from "@inertiajs/react";
+import Nav from "./Nav";
+import Footer from "./Footer";
 
 const Layout = ({ children }) => (
 	<>
-		<div>
+		{/* <div>
 			<nav className="flex items-start justify-center">
 				<ul className="flex space-x-4">
 					<li>
@@ -11,7 +13,13 @@ const Layout = ({ children }) => (
 				</ul>
 			</nav>
 			<div className="flex items-center justify-center mt-32">{children}</div>
-		</div>
+		</div> */}
+
+        <div className="min-h-screen grid grid-flow-row grid-rows-[auto_1fr_auto]">
+            <Nav />
+            <main className="container mx-auto">{children}</main>
+            <Footer />
+        </div>
 	</>
 );
 

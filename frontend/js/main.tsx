@@ -8,9 +8,10 @@ import Layout from './components/Layout';
 
 
 import "../css/main.css";
+import "../css/style.sass"
 
 
-const pages = import.meta.glob("./pages/**/*.jsx");
+const pages = import.meta.glob<{ default: any }>("./pages/**/*.tsx");
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	createInertiaApp({
     resolve: async name => {
-      const page = (await pages[`./pages/${name}.jsx`]()).default;
+      const page = (await pages[`./pages/${name}.tsx`]()).default;
       page.layout = page.layout || Layout
       return page
     },

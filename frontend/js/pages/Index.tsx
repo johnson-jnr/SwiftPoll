@@ -1,22 +1,20 @@
-
-import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-  AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
-
+// import { Button } from "@/components/shadcn/button";
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+//   AlertDialogDescription,
+// } from "@/components/shadcn/alert-dialog";
 
 export default function Index() {
-  return (
-    <>
-      <div>
+    return (
+        <>
+            {/* <div>
         <h2 className="text-3xl font-bold underline">This is the home page</h2>
         <p className="text-lg font-mono">
           Find it in 'frontend/js/pages/Index.jsx'
@@ -45,7 +43,8 @@ export default function Index() {
           </AlertDialogContent>
         </AlertDialog>
         
-      </div>
-    </>
-  );
+      </div> */}
+            Home
+        </>
+    );
 }
