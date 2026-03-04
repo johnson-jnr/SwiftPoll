@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { Check, ChartNoAxesColumnIncreasing, Link } from 'lucide-react';
+import {
+    Check,
+    ChartNoAxesColumnIncreasing,
+    Link as LinkIcon,
+} from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -8,14 +12,17 @@ import {
     DialogDescription,
     DialogFooter,
 } from '@/components/shadcn/dialog';
-import { Button } from '@/components/shadcn/button';
+import { Button, buttonVariants } from '@/components/shadcn/button';
+import { Link } from '@inertiajs/react';
 
 export default function VoteSuccessDialog({
     open,
     onOpenChange,
+    pollId,
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    pollId: string;
 }) {
     const [copied, setCopied] = useState(false);
 
@@ -43,9 +50,9 @@ export default function VoteSuccessDialog({
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex-row gap-2 sm:justify-center">
-                    <Button className="flex-1">
+                    <Link href={`/${pollId}/result`} className={buttonVariants({ className: 'flex-1' })}>
                         <ChartNoAxesColumnIncreasing /> Results
-                    </Button>
+                    </Link>
                     <Button
                         variant="outline"
                         className="flex-1"
@@ -54,7 +61,7 @@ export default function VoteSuccessDialog({
                         {copied ? (
                             <Check className="text-green-500" />
                         ) : (
-                            <Link />
+                            <LinkIcon />
                         )}
                         {copied ? 'Copied!' : 'Poll Link'}
                     </Button>

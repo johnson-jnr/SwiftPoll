@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect
 from ipware import get_client_ip
 from polls.forms import PollForm, PollVoteForm
 from polls.models import Option, Poll, Vote
+from django.db.models import Count
 
 
 def home(request):
@@ -100,3 +101,32 @@ def login(request):
 
 def signup(request):
     return render(request, "Signup")
+
+
+def result(request, public_id):
+    poll = get_object_or_404(
+        Poll.objects.prefetch_related("options"),
+        public_id=public_id,
+    )
+    options = list(
+        poll.options.annotate(vote_count=Count("vote"))
+        .values("id", "text", "vote_count")
+        .order_by("-vote_count")
+    )
+    total_vote = sum(option["vote_count"] for option in options)
+    return render(
+        request,
+        "PollResult",
+        {
+            "public_id": public_id,
+            "poll": {
+                "title": poll.title,
+                "description": poll.description,
+                "user": poll.user,
+                "active": poll.active,
+                "created_at": poll.created_at,
+                "options": options,
+                "total_vote": total_vote,
+            },
+        },
+    )

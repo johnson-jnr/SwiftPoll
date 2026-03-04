@@ -30,7 +30,7 @@ const PollDetail = ({ poll, public_id }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(`/${poll.public_id}/vote/`, {
+        post(`/${public_id}/vote/`, {
             onSuccess() {
                 setDialogOpen(true);
             },
@@ -106,7 +106,11 @@ const PollDetail = ({ poll, public_id }) => {
                 </Card>
             </form>
 
-            <VoteSuccessDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+            <VoteSuccessDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                pollId={public_id}
+            />
             <p className="flex items-center justify-center gap-2 mt-3 text-sm text-muted-foreground">
                 <LockKeyhole className="size-4" /> One vote per IP-Address
                 allowed.
