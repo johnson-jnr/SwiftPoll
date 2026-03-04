@@ -23,6 +23,7 @@ from . import views
 urlpatterns = [
     path("", views.home, name="home"),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),
+    path("<str:public_id>/vote/", views.vote, name="vote"),
     path("login/", views.login, name="login"),
     path("signup/", views.signup, name="signup"),
     path("admin/", admin.site.urls),

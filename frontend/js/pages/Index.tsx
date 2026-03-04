@@ -37,9 +37,11 @@ export default function Index() {
                             placeholder="Type your Title"
                         />
                     </label>
-                    <div className="mt-1 text-xs text-red-400">
-                        {errors.title}
-                    </div>
+                    {errors.title && (
+                        <div className="mt-1 text-xs text-red-400">
+                            {errors.title}
+                        </div>
+                    )}
                 </div>
 
                 <div>
@@ -55,9 +57,11 @@ export default function Index() {
                             placeholder="Type your Description"
                         />
                     </label>
-                    <div className="mt-1 text-xs text-red-400">
-                        {errors.description}
-                    </div>
+                    {errors.description && (
+                        <div className="mt-1 text-xs text-red-400">
+                            {errors.description}
+                        </div>
+                    )}
                 </div>
 
                 <div>

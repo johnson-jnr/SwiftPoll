@@ -26,6 +26,9 @@ class Option(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="options")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.text
+
 
 class Vote(models.Model):
     hashed_ip_address = models.CharField(max_length=64)

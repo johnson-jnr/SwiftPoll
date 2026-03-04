@@ -206,3 +206,4 @@ def immutable_file_test(path, url):
 
 
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
+IP_HASH_SECRET_KEY = env("IP_HASH_SECRET_KEY")
