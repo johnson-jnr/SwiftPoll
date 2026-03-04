@@ -10,8 +10,9 @@ from ipware import get_client_ip
 from polls.forms import PollForm, PollVoteForm
 from polls.models import Option, Poll, Vote
 from django.db.models import Count
-from allauth.account.forms import LoginForm
-from allauth.account.utils import perform_login
+from allauth.account.forms import LoginForm, SignupForm
+from allauth.account.models import EmailConfirmationHMAC
+from allauth.account.utils import complete_signup, perform_login
 from django.contrib.auth import logout
 
 
@@ -119,7 +120,41 @@ def login(request):
 
 
 def signup(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        form = SignupForm(data=data)
+        if form.is_valid():
+            user = form.save(request)
+            complete_signup(request, user, settings.ACCOUNT_EMAIL_VERIFICATION, "/")
+            return redirect("home")
+        else:
+            errors = {
+                ("general" if k == "__all__" else k): "\n".join(v)
+                for k, v in form.errors.items()
+            }
+            return render(request, "Signup", {"errors": errors})
     return render(request, "Signup")
+
+
+def confirm_email(request, key):
+    confirmation = EmailConfirmationHMAC.from_key(key)
+    if not confirmation:
+        return render(
+            request, "ConfirmEmail", {"error": "Invalid or expired confirmation link."}
+        )
+
+    if request.method == "POST":
+        confirmation.confirm(request)
+        return redirect("home")
+
+    return render(
+        request,
+        "ConfirmEmail",
+        {
+            "email": confirmation.email_address.email,
+            "username": confirmation.email_address.user.get_username(),
+        },
+    )
 
 
 def forgot_password(request):

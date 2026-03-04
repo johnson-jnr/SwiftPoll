@@ -1,26 +1,35 @@
-import { Link } from "@inertiajs/react";
-import Nav from "./Nav";
-import Footer from "./Footer";
+import { useEffect } from 'react';
+import { usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
+import Nav from './Nav';
+import Footer from './Footer';
+import { Toaster } from './shadcn/sonner';
 
-const Layout = ({ children }) => (
-	<>
-		{/* <div>
-			<nav className="flex items-start justify-center">
-				<ul className="flex space-x-4">
-					<li>
-						<Link href="/">Home</Link>
-					</li>
-				</ul>
-			</nav>
-			<div className="flex items-center justify-center mt-32">{children}</div>
-		</div> */}
+type Message = { message: string; level_tag: string };
 
-        <div className="min-h-screen grid grid-flow-row grid-rows-[auto_1fr_auto]">
-            <Nav />
-            <main className="container mx-auto">{children}</main>
-            <Footer />
-        </div>
-	</>
-);
+const Layout = ({ children }) => {
+    const { messages } = usePage().props as unknown as { messages: Message[] };
+
+    useEffect(() => {
+        messages?.forEach(({ message, level_tag }) => {
+            if (level_tag === 'success') toast.success(message);
+            else if (level_tag === 'error') toast.error(message);
+            else if (level_tag === 'warning') toast.warning(message);
+            else toast(message);
+        });
+        console.log('msg');
+    }, [messages]);
+
+    return (
+        <>
+            <div className="min-h-screen grid grid-flow-row grid-rows-[auto_1fr_auto]">
+                <Nav />
+                <main className="container mx-auto">{children}</main>
+                <Footer />
+            </div>
+            <Toaster position="top-right" />
+        </>
+    );
+};
 
 export default (page) => <Layout>{page}</Layout>;

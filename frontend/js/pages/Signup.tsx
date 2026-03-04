@@ -13,7 +13,8 @@ import {
     FieldLabel,
 } from '@/components/shadcn/field';
 import { Input } from '@/components/shadcn/input';
-import { Link } from '@inertiajs/react';
+import { Spinner } from '@/components/shadcn/spinner';
+import { Form, Link } from '@inertiajs/react';
 
 const Signup = () => {
     return (
@@ -27,64 +28,102 @@ const Signup = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form>
-                            <FieldGroup>
-                                <Field>
-                                    <FieldLabel htmlFor="email">
-                                        Email
-                                    </FieldLabel>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="m@example.com"
-                                        required
-                                    />
-                                    <FieldDescription>
-                                        We&apos;ll use this to contact you. We
-                                        will not share your email with anyone
-                                        else.
-                                    </FieldDescription>
-                                </Field>
-                                <Field>
-                                    <FieldLabel htmlFor="password">
-                                        Password
-                                    </FieldLabel>
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        required
-                                    />
-                                    <FieldDescription>
-                                        Must be at least 8 characters long.
-                                    </FieldDescription>
-                                </Field>
-                                <Field>
-                                    <FieldLabel htmlFor="confirm-password">
-                                        Confirm Password
-                                    </FieldLabel>
-                                    <Input
-                                        id="confirm-password"
-                                        type="password"
-                                        required
-                                    />
-                                    <FieldDescription>
-                                        Please confirm your password.
-                                    </FieldDescription>
-                                </Field>
-                                <FieldGroup>
-                                    <Field>
-                                        <Button type="submit">
-                                            Create Account
-                                        </Button>
-                                        <Button>Sign up with Google</Button>
-                                        <FieldDescription className="px-6 text-center">
-                                            Already have an account?
-                                            <Link href="/login">Sign in</Link>
-                                        </FieldDescription>
-                                    </Field>
-                                </FieldGroup>
-                            </FieldGroup>
-                        </form>
+                        <Form action="" method="post">
+                            {({ processing, errors }) => (
+                                <div>
+                                    {errors.general && (
+                                        <div className="mb-4 text-sm text-red-400 whitespace-pre-line">
+                                            {errors.general}
+                                        </div>
+                                    )}
+                                    <FieldGroup>
+                                        <Field>
+                                            <FieldLabel htmlFor="email">
+                                                Email
+                                            </FieldLabel>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                name="email"
+                                                placeholder="m@example.com"
+                                                required
+                                            />
+                                            {errors.email && (
+                                                <div className="mb-4 text-sm text-red-400 whitespace-pre-line">
+                                                    {errors.email}
+                                                </div>
+                                            )}
+                                            <FieldDescription>
+                                                We&apos;ll use this to contact
+                                                you. We will not share your
+                                                email with anyone else.
+                                            </FieldDescription>
+                                        </Field>
+                                        <Field>
+                                            <FieldLabel htmlFor="password">
+                                                Password
+                                            </FieldLabel>
+                                            <Input
+                                                id="password"
+                                                type="password"
+                                                name="password1"
+                                                required
+                                            />
+                                            {errors.password1 && (
+                                                <div className="mb-4 text-sm text-red-400 whitespace-pre-line">
+                                                    {errors.password1}
+                                                </div>
+                                            )}
+                                            <FieldDescription>
+                                                Must be at least 8 characters
+                                                long.
+                                            </FieldDescription>
+                                        </Field>
+                                        <Field>
+                                            <FieldLabel htmlFor="confirm-password">
+                                                Confirm Password
+                                            </FieldLabel>
+                                            <Input
+                                                id="confirm-password"
+                                                name="password2"
+                                                type="password"
+                                                required
+                                            />
+                                            {errors.password2 && (
+                                                <div className="mb-4 text-sm text-red-400 whitespace-pre-line">
+                                                    {errors.password2}
+                                                </div>
+                                            )}
+                                            <FieldDescription>
+                                                Please confirm your password.
+                                            </FieldDescription>
+                                        </Field>
+                                        <FieldGroup>
+                                            <Field>
+                                                <Button
+                                                    type="submit"
+                                                    disabled={processing}
+                                                >
+                                                    {processing && (
+                                                        <Spinner data-icon="inline-start" />
+                                                    )}
+                                                    Create Account
+                                                </Button>
+                                                <Button>
+                                                    Sign up with Google
+                                                </Button>
+                                                <FieldDescription className="px-6 text-center">
+                                                    Already have an account?
+                                                    <Link href="/login">
+                                                        Sign in
+                                                    </Link>
+                                                </FieldDescription>
+                                            </Field>
+                                        </FieldGroup>
+                                    </FieldGroup>
+                                </div>
+                            )}
+                        </Form>
                     </CardContent>
                 </Card>
             </div>

@@ -26,6 +26,11 @@ urlpatterns = [
     path("signout/", views.signout, name="signout"),
     path("forgot-password/", views.forgot_password, name="forgot_passsword"),
     path("admin/", admin.site.urls),
+    path(
+        "accounts/confirm-email/<str:key>/",
+        views.confirm_email,
+        name="account_confirm_email",
+    ),
     path("accounts/", include("allauth.urls")),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),
     path("<str:public_id>/vote/", views.vote, name="vote"),
