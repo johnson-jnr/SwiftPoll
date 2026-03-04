@@ -1,13 +1,22 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from '@inertiajs/react';
 
 const Nav = () => {
+    const { user } = usePage().props;
     return (
         <div className="container px-10!">
             <nav className="flex items-center space-x-4">
                 <Link href="/">Home page</Link>
-                <Link href="/about">About page</Link>
-                <Link href="/login">Login</Link>
-                <Link href="/signup">Signup</Link>
+
+                {user ? (
+                    <>
+                        <Link href="/signout">Logout</Link>
+                    </>
+                ) : (
+                    <>
+                        <Link href="/login">Login</Link>
+                        <Link href="/signup">Signup</Link>
+                    </>
+                )}
             </nav>
         </div>
     );

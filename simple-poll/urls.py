@@ -21,12 +21,14 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("login/", views.login, name="login"),
+    path("signup/", views.signup, name="signup"),
+    path("signout/", views.signout, name="signout"),
+    path("forgot-password/", views.forgot_password, name="forgot_passsword"),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),
     path("<str:public_id>/vote/", views.vote, name="vote"),
     path("<str:public_id>/result/", views.result, name="result"),
-    path("login/", views.login, name="login"),
-    path("signup/", views.signup, name="signup"),
-    path("admin/", admin.site.urls),
-    path("accounts/", include("allauth.urls")),
+    path("", views.home, name="home"),
 ]

@@ -7,6 +7,9 @@ class DataShareMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
+        user = None
+        if request.user.is_authenticated:
+            user = {"id": request.user.id, "email": request.user.email}
         messages = []
         for message in get_messages(request):
             message = {
@@ -18,7 +21,7 @@ class DataShareMiddleware(object):
             }
             messages.append(message)
 
-        share(request, messages=messages)
+        share(request, messages=messages, user=user)
 
         response = self.get_response(request)
 

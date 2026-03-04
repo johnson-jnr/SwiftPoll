@@ -141,6 +141,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 AUTH_USER_MODEL = "accounts.User"
 
 AUTHENTICATION_BACKENDS = [
@@ -150,9 +152,11 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-LOGIN_REDIRECT_URL = "/"
+ACCOUNT_EMAIL_VERIFICATION = "optional"
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
+# Allauth configuration
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 
 
 # Internationalization
@@ -206,4 +210,6 @@ def immutable_file_test(path, url):
 
 
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
+
 IP_HASH_SECRET_KEY = env("IP_HASH_SECRET_KEY")
+GOOGLE_CALLBACK_URL = env("GOOGLE_CALLBACK_URL")

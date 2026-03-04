@@ -10,6 +10,9 @@ from ipware import get_client_ip
 from polls.forms import PollForm, PollVoteForm
 from polls.models import Option, Poll, Vote
 from django.db.models import Count
+from allauth.account.forms import LoginForm
+from allauth.account.utils import perform_login
+from django.contrib.auth import logout
 
 
 def home(request):
@@ -96,11 +99,36 @@ def vote(request, public_id):
 
 
 def login(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        form = LoginForm(data=data, request=request)
+        if form.is_valid():
+            perform_login(
+                request,
+                form.user,
+                email_verification=settings.ACCOUNT_EMAIL_VERIFICATION,
+            )
+            return redirect("home")
+        else:
+            errors = {
+                ("general" if k == "__all__" else k): "\n".join(v)
+                for k, v in form.errors.items()
+            }
+            return render(request, "Login", {"errors": errors})
     return render(request, "Login")
 
 
 def signup(request):
     return render(request, "Signup")
+
+
+def forgot_password(request):
+    return render(request, "ForgotPassword")
+
+
+def signout(request):
+    logout(request)
+    return redirect("home")
 
 
 def result(request, public_id):
