@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { ExternalLink } from 'lucide-react';
 import { format } from 'timeago.js';
-import { MoreHorizontalIcon } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -29,25 +29,23 @@ import {
 import { Switch } from '@/components/shadcn/switch';
 import { Button } from '@/components/shadcn/button';
 import { Label } from '@/components/shadcn/label';
-
-interface Poll {
-    title: string;
-    description: string;
-    active: boolean;
-    created_at: string;
-    total_vote: number;
-}
+import { Poll } from '@/lib/types';
 
 const PollDialog = ({ poll }: { poll: Poll }) => {
     const [isActive, setIsActive] = useState(poll.active);
     const [oneVotePerIp, setOneVotePerIp] = useState(false);
+    const [showResults, setShowResults] = useState(false);
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <button className="text-muted-foreground hover:text-foreground transition-colors">
-                    <MoreHorizontalIcon size={16} />
-                </button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-6 w-20 px-2 text-xs justify-center"
+                >
+                    Edit
+                </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
@@ -75,6 +73,16 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                             id={`ip-${poll.title}`}
                             checked={oneVotePerIp}
                             onCheckedChange={setOneVotePerIp}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor={`results-${poll.title}`}>
+                            Allow public to view results
+                        </Label>
+                        <Switch
+                            id={`results-${poll.title}`}
+                            checked={showResults}
+                            onCheckedChange={setShowResults}
                         />
                     </div>
                 </div>
@@ -155,7 +163,9 @@ const Dashboard = ({
                             {polls.map((poll, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="font-medium max-w-40">
-                                        <p className="truncate">{poll.title}</p>
+                                        <span className="truncate block">
+                                            {poll.title}
+                                        </span>
                                     </TableCell>
                                     <TableCell>
                                         {poll.active ? 'Yes' : 'No'}
@@ -165,7 +175,45 @@ const Dashboard = ({
                                     </TableCell>
                                     <TableCell>{poll.total_vote}</TableCell>
                                     <TableCell>
-                                        <PollDialog poll={poll} />
+                                        <div className="flex items-center gap-2">
+                                            <PollDialog poll={poll} />
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="relative h-6 w-20 px-2 text-xs justify-center group"
+                                                asChild
+                                            >
+                                                <a
+                                                    href={`/${poll.public_id}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    View
+                                                    <ExternalLink
+                                                        size={10}
+                                                        className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    />
+                                                </a>
+                                            </Button>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="relative h-6 w-20 px-2 text-xs justify-center group"
+                                                asChild
+                                            >
+                                                <a
+                                                    href={`/${poll.public_id}/result`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Result
+                                                    <ExternalLink
+                                                        size={10}
+                                                        className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    />
+                                                </a>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}

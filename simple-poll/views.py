@@ -270,7 +270,7 @@ def result(request, public_id):
 def dashboard(request):
     polls = (
         Poll.objects.filter(user=request.user)
-        .values("title", "description", "active", "created_at")
+        .values("title", "description", "active", "public_id", "created_at")
         .annotate(total_vote=Count("votes"))
     )
     total_votes = sum(poll["total_vote"] for poll in polls)
