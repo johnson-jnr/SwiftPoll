@@ -1,32 +1,31 @@
-import "vite/modulepreload-polyfill";
-import axios from "axios";
+import 'vite/modulepreload-polyfill';
+import axios from 'axios';
 
 import React from 'react';
-import { createRoot } from "react-dom/client";
-import { createInertiaApp } from '@inertiajs/react';
+import { createRoot } from 'react-dom/client';
+import { createInertiaApp, router } from '@inertiajs/react';
 import Layout from './components/Layout';
+import DashboardLayout from './components/DashboardLayout';
 
+import '../css/main.css';
+import '../css/style.sass';
 
-import "../css/main.css";
-import "../css/style.sass"
+const pages = import.meta.glob<{ default: any }>('./pages/**/*.tsx');
 
+document.addEventListener('DOMContentLoaded', () => {
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-const pages = import.meta.glob<{ default: any }>("./pages/**/*.tsx");
-
-
-document.addEventListener("DOMContentLoaded", () => {
-	axios.defaults.xsrfCookieName = "csrftoken";
-	axios.defaults.xsrfHeaderName = "X-CSRFToken";
-	
-	createInertiaApp({
-    resolve: async name => {
-      const page = (await pages[`./pages/${name}.tsx`]()).default;
-      page.layout = page.layout || Layout
-      return page
-    },
-    setup({ el, App, props }) {
-		createRoot(el).render(<App {...props} />);
-	},
-  });
-  
+    createInertiaApp({
+        resolve: async (name) => {
+            const page = (await pages[`./pages/${name}.tsx`]()).default;
+            page.layout = name.toLowerCase().startsWith('dashboard')
+                ? DashboardLayout
+                : Layout;
+            return page;
+        },
+        setup({ el, App, props }) {
+            createRoot(el).render(<App {...props} />);
+        },
+    });
 });

@@ -21,6 +21,7 @@ from django.urls import path, include, re_path
 from . import views
 
 urlpatterns = [
+    path("dashboard/", views.dashboard, name="dashboard"),
     path("login/", views.login, name="login"),
     path("signup/", views.signup, name="signup"),
     path("signout/", views.signout, name="signout"),

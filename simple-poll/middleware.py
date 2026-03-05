@@ -9,7 +9,12 @@ class DataShareMiddleware(object):
     def __call__(self, request):
         user = None
         if request.user.is_authenticated:
-            user = {"id": request.user.id, "email": request.user.email}
+            user = {
+                "id": request.user.id,
+                "name": request.user.get_full_name() or request.user.username,
+                "email": request.user.email,
+                "avatar": "",
+            }
         messages = []
         for message in get_messages(request):
             message = {

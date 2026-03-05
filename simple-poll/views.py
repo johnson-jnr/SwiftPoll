@@ -10,7 +10,13 @@ from ipware import get_client_ip
 from polls.forms import PollForm, PollVoteForm
 from polls.models import Option, Poll, Vote
 from django.db.models import Count
-from allauth.account.forms import LoginForm, ResetPasswordForm, ResetPasswordKeyForm, SignupForm, UserTokenForm
+from allauth.account.forms import (
+    LoginForm,
+    ResetPasswordForm,
+    ResetPasswordKeyForm,
+    SignupForm,
+    UserTokenForm,
+)
 from allauth.account.internal.flows import password_reset as password_reset_flows
 from allauth.account.models import EmailConfirmationHMAC
 from allauth.account.utils import complete_signup, perform_login
@@ -112,7 +118,7 @@ def login(request):
                 form.user,
                 email_verification=settings.ACCOUNT_EMAIL_VERIFICATION,
             )
-            return redirect("home")
+            return redirect(settings.LOGIN_REDIRECT_URL)
         else:
             errors = {
                 ("general" if k == "__all__" else k): "\n".join(v)
@@ -220,7 +226,7 @@ def password_reset_from_key(request, uidb36, key):
 
 def signout(request):
     logout(request)
-    return redirect("home")
+    return redirect(settings.LOGOUT_REDIRECT_URL)
 
 
 def result(request, public_id):
@@ -250,3 +256,7 @@ def result(request, public_id):
             },
         },
     )
+
+
+def dashboard(request):
+    return render(request, "Dashboard")

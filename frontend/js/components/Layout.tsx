@@ -17,7 +17,6 @@ const Layout = ({ children }) => {
             else if (level_tag === 'warning') toast.warning(message);
             else toast(message);
         });
-        console.log('msg');
     }, [messages]);
 
     return (
