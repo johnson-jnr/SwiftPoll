@@ -132,10 +132,15 @@ const Signup = () => {
                                 Sign up with Google
                             </Button>
                         </form>
-                        <FieldDescription className="mt-4 px-6 text-center">
+                        <div className="mt-4 text-center text-sm text-muted-foreground">
                             Already have an account?
-                            <Link href="/login">Sign in</Link>
-                        </FieldDescription>
+                            <Link
+                                href="/login"
+                                className="ml-1 underline underline-offset-4 hover:text-primary"
+                            >
+                                Sign in
+                            </Link>
+                        </div>
                     </CardContent>
                 </Card>
             </div>

@@ -5,12 +5,7 @@ import {
     CardTitle,
     CardContent,
 } from '@/components/shadcn/card';
-import {
-    Field,
-    FieldDescription,
-    FieldGroup,
-    FieldLabel,
-} from '@/components/shadcn/field';
+import { Field, FieldGroup, FieldLabel } from '@/components/shadcn/field';
 import { Input } from '@/components/shadcn/input';
 import { Form, Link } from '@inertiajs/react';
 import { Button } from '@/components/shadcn/button';
@@ -112,10 +107,15 @@ const Login = () => {
                                     Login with Google
                                 </Button>
                             </form>
-                            <FieldDescription className="mt-4 text-center">
+                            <div className="mt-4 text-center text-sm text-muted-foreground">
                                 Don&apos;t have an account?
-                                <Link href="/signup">Sign up</Link>
-                            </FieldDescription>
+                                <Link
+                                    href="/signup"
+                                    className="ml-1 underline underline-offset-4 hover:text-primary"
+                                >
+                                    Sign up
+                                </Link>
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
