@@ -19,7 +19,7 @@ import { useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 const PollDetail = ({ poll, public_id }) => {
-    const author = poll.user ? `user #${poll.user}` : 'a guest';
+    const author = poll.user ? `user #${poll.user.username}` : 'a guest';
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const { data, setData, post, processing } = useForm({

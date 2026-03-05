@@ -23,6 +23,7 @@ from allauth.account.utils import complete_signup, perform_login
 from allauth.account.views import INTERNAL_RESET_SESSION_KEY
 from django.contrib.auth import logout
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -50,6 +51,9 @@ def poll_detail(request, public_id):
         Poll.objects.prefetch_related("options"),
         public_id=public_id,
     )
+    user = None
+    if poll.user:
+        user = {"username": poll.user.username}
     errors = request.session.pop("errors", {})
     return render(
         request,
@@ -60,7 +64,7 @@ def poll_detail(request, public_id):
             "poll": {
                 "title": poll.title,
                 "description": poll.description,
-                "user": poll.user,
+                "user": user,
                 "active": poll.active,
                 "created_at": poll.created_at,
                 "options": [{"id": o.id, "text": o.text} for o in poll.options.all()],
@@ -224,6 +228,7 @@ def password_reset_from_key(request, uidb36, key):
     return render(request, "PasswordResetFromKey")
 
 
+@login_required
 def signout(request):
     logout(request)
     return redirect(settings.LOGOUT_REDIRECT_URL)
@@ -234,6 +239,9 @@ def result(request, public_id):
         Poll.objects.prefetch_related("options"),
         public_id=public_id,
     )
+    user = None
+    if poll.user:
+        user = {"username": poll.user.username}
     options = list(
         poll.options.annotate(vote_count=Count("vote"))
         .values("id", "text", "vote_count")
@@ -248,7 +256,7 @@ def result(request, public_id):
             "poll": {
                 "title": poll.title,
                 "description": poll.description,
-                "user": poll.user,
+                "user": user,
                 "active": poll.active,
                 "created_at": poll.created_at,
                 "options": options,
@@ -258,5 +266,12 @@ def result(request, public_id):
     )
 
 
+@login_required
 def dashboard(request):
-    return render(request, "Dashboard")
+    polls = (
+        Poll.objects.filter(user=request.user)
+        .values("title", "description", "active", "created_at")
+        .annotate(total_vote=Count("votes"))
+    )
+    total_votes = sum(poll["total_vote"] for poll in polls)
+    return render(request, "Dashboard", {"polls": polls, "total_votes": total_votes})

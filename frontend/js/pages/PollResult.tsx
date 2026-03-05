@@ -17,7 +17,7 @@ import { POLL_PALETTE } from '@/lib/pollColors';
 import PollPieChart from '@/components/PollPieChart';
 
 const PollResult = ({ public_id, poll }) => {
-    const author = poll.user ? `user #${poll.user}` : 'a guest';
+    const author = poll.user ? `user #${poll.user.username}` : 'a guest';
 
     return (
         <div className="max-w-4xl mx-auto mt-20">
