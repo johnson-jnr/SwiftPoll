@@ -34,10 +34,15 @@ const ForgotPassword = () => {
                         </CardHeader>
                         <CardContent>
                             {sent ? (
-                                <p className="text-sm text-green-600">
-                                    We have sent you an email. If you have not
-                                    received it please check your spam folder.
-                                </p>
+                                <div className="flex flex-col gap-4">
+                                    <p className="text-sm text-green-600">
+                                        We have sent you an email. If you have not
+                                        received it please check your spam folder.
+                                    </p>
+                                    <Button asChild variant="outline">
+                                        <Link href="/login">Back to login</Link>
+                                    </Button>
+                                </div>
                             ) : (
                                 <Form
                                     action=""
