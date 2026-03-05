@@ -44,7 +44,7 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                     size="sm"
                     className="h-6 w-20 px-2 text-xs justify-center"
                 >
-                    Edit
+                    Settings
                 </Button>
             </DialogTrigger>
             <DialogContent>
@@ -176,7 +176,6 @@ const Dashboard = ({
                                     <TableCell>{poll.total_vote}</TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
-                                            <PollDialog poll={poll} />
                                             <Button
                                                 variant="outline"
                                                 size="sm"
@@ -213,6 +212,7 @@ const Dashboard = ({
                                                     />
                                                 </a>
                                             </Button>
+                                            <PollDialog poll={poll} />
                                         </div>
                                     </TableCell>
                                 </TableRow>
