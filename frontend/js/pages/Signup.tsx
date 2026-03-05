@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/shadcn/input';
 import { Spinner } from '@/components/shadcn/spinner';
 import { Form, Link } from '@inertiajs/react';
+import { getCsrfToken } from '@/lib/utils';
 
 const Signup = () => {
     return (
@@ -98,32 +99,43 @@ const Signup = () => {
                                                 Please confirm your password.
                                             </FieldDescription>
                                         </Field>
-                                        <FieldGroup>
-                                            <Field>
-                                                <Button
-                                                    type="submit"
-                                                    disabled={processing}
-                                                >
-                                                    {processing && (
-                                                        <Spinner data-icon="inline-start" />
-                                                    )}
-                                                    Create Account
-                                                </Button>
-                                                <Button>
-                                                    Sign up with Google
-                                                </Button>
-                                                <FieldDescription className="px-6 text-center">
-                                                    Already have an account?
-                                                    <Link href="/login">
-                                                        Sign in
-                                                    </Link>
-                                                </FieldDescription>
-                                            </Field>
-                                        </FieldGroup>
+                                        <Field>
+                                            <Button
+                                                type="submit"
+                                                disabled={processing}
+                                            >
+                                                {processing && (
+                                                    <Spinner data-icon="inline-start" />
+                                                )}
+                                                Create Account
+                                            </Button>
+                                        </Field>
                                     </FieldGroup>
                                 </div>
                             )}
                         </Form>
+                        <form
+                            method="post"
+                            action="/accounts/google/login/"
+                            className="mt-2"
+                        >
+                            <input
+                                type="hidden"
+                                name="csrfmiddlewaretoken"
+                                value={getCsrfToken()}
+                            />
+                            <Button
+                                type="submit"
+                                variant="outline"
+                                className="w-full"
+                            >
+                                Sign up with Google
+                            </Button>
+                        </form>
+                        <FieldDescription className="mt-4 px-6 text-center">
+                            Already have an account?
+                            <Link href="/login">Sign in</Link>
+                        </FieldDescription>
                     </CardContent>
                 </Card>
             </div>

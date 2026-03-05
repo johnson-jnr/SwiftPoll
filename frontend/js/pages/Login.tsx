@@ -15,6 +15,7 @@ import { Input } from '@/components/shadcn/input';
 import { Form, Link } from '@inertiajs/react';
 import { Button } from '@/components/shadcn/button';
 import { Spinner } from '@/components/shadcn/spinner';
+import { getCsrfToken } from '@/lib/utils';
 
 const Login = () => {
     return (
@@ -88,20 +89,33 @@ const Login = () => {
                                                     )}
                                                     Login
                                                 </Button>
-                                                <Button>
-                                                    Login with Google
-                                                </Button>
-                                                <FieldDescription className="text-center">
-                                                    Don&apos;t have an account?
-                                                    <Link href="/signup">
-                                                        Sign up
-                                                    </Link>
-                                                </FieldDescription>
                                             </Field>
                                         </FieldGroup>
                                     </div>
                                 )}
                             </Form>
+                            <form
+                                method="post"
+                                action="/accounts/google/login/"
+                                className="mt-2"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrfmiddlewaretoken"
+                                    value={getCsrfToken()}
+                                />
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="w-full"
+                                >
+                                    Login with Google
+                                </Button>
+                            </form>
+                            <FieldDescription className="mt-4 text-center">
+                                Don&apos;t have an account?
+                                <Link href="/signup">Sign up</Link>
+                            </FieldDescription>
                         </CardContent>
                     </Card>
                 </div>
