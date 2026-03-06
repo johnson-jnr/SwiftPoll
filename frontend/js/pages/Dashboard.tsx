@@ -65,10 +65,10 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                     <DialogHeader>
                         <DialogTitle>{poll.title}</DialogTitle>
                     </DialogHeader>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="mt-2 text-sm text-muted-foreground">
                         {poll.description}
                     </p>
-                    <div className="flex flex-col gap-4 py-2 mt-4">
+                    <div className="flex flex-col gap-4 py-2 my-4">
                         <div className="flex items-center justify-between">
                             <Label htmlFor={`active-${poll.title}`}>
                                 Poll Active
@@ -119,7 +119,7 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                             )}
                         </div>
                     </div>
-                    <DialogFooter className="mt-4">
+                    <DialogFooter>
                         <DialogClose asChild>
                             <Button variant="outline" type="button">
                                 Cancel

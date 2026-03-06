@@ -5,6 +5,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { Toaster } from '@/components/shadcn/sonner';
 import { Message } from '@/lib/types';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const Layout = ({ children }) => {
     const { messages } = usePage().props as unknown as { messages: Message[] };
@@ -19,14 +20,14 @@ const Layout = ({ children }) => {
     }, [messages]);
 
     return (
-        <>
+        <ThemeProvider storageKey="vite-ui-theme">
             <div className="min-h-screen grid grid-flow-row grid-rows-[auto_1fr_auto]">
                 <Nav />
                 <main className="container mx-auto">{children}</main>
                 <Footer />
             </div>
             <Toaster position="top-right" />
-        </>
+        </ThemeProvider>
     );
 };
 

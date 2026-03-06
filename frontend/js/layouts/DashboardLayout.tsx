@@ -1,4 +1,5 @@
 import { usePage } from '@inertiajs/react';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { AppSidebar } from '@/components/AppSidebar';
 import { NavUser } from '@/components/NavUser';
 import {
@@ -14,6 +15,7 @@ import {
     SidebarTrigger,
 } from '@/components/shadcn/sidebar';
 import { Message } from '@/lib/types';
+import { ModeToggle } from '@/components/ModeToggle';
 import { useEffect } from 'react';
 import { toast, Toaster } from 'sonner';
 
@@ -42,7 +44,7 @@ const DashboardLayout = ({ children }) => {
     }, [messages]);
 
     return (
-        <>
+        <ThemeProvider storageKey="vite-ui-theme">
             <SidebarProvider>
                 <AppSidebar />
                 <SidebarInset>
@@ -61,7 +63,8 @@ const DashboardLayout = ({ children }) => {
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
-                        <div className="ml-auto">
+                        <div className="ml-auto flex items-center gap-2">
+                            <ModeToggle />
                             <NavUser user={user} />
                         </div>
                     </header>
@@ -71,7 +74,7 @@ const DashboardLayout = ({ children }) => {
                 </SidebarInset>
             </SidebarProvider>
             <Toaster position="top-right" />
-        </>
+        </ThemeProvider>
     );
 };
 
