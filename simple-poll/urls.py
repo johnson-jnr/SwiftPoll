@@ -20,6 +20,9 @@ from django.urls import path, include, re_path
 
 from . import views
 
+handler404 = views.error_404
+handler403 = views.error_403
+
 urlpatterns = [
     path("dashboard/", views.dashboard, name="dashboard"),
     path("login/", views.login, name="login"),
@@ -37,7 +40,7 @@ urlpatterns = [
         views.password_reset_from_key,
         name="account_reset_password_from_key",
     ),
-    path("accounts/", include("allauth.urls")),
+    # path("accounts/", include("allauth.urls")),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),
     path("<str:public_id>/settings/", views.poll_settings, name="poll_settings"),
     path("<str:public_id>/vote/", views.vote, name="vote"),

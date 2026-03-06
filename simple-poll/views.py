@@ -25,6 +25,7 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 
 def home(request):
@@ -232,6 +233,18 @@ def password_reset_from_key(request, uidb36, key):
     return render(request, "PasswordResetFromKey")
 
 
+def error_404(request, exception):
+    response = render(request, "errors/Error404", {})
+    response.status_code = 404
+    return response
+
+
+def error_403(request, exception):
+    response = render(request, "errors/Error403", {})
+    response.status_code = 403
+    return response
+
+
 @login_required
 def signout(request):
     logout(request)
@@ -243,6 +256,10 @@ def result(request, public_id):
         Poll.objects.prefetch_related("options"),
         public_id=public_id,
     )
+    is_owner = request.user.is_authenticated and poll.user == request.user
+    if not poll.allow_public_results and not is_owner:
+        raise PermissionDenied
+
     user = None
     if poll.user:
         user = {"username": poll.user.username}

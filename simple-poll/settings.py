@@ -35,7 +35,7 @@ SECRET_KEY = env(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
@@ -194,7 +194,7 @@ STATIC_ROOT = BASE_DIR / "static"
 # If use HMR or not.
 DJANGO_VITE = {
     "default": {
-        "dev_mode": DEBUG,
+        "dev_mode": env.bool("VITE_DEV_MODE", default=DEBUG),
         "dev_server_host": env.str("DJANGO_VITE_DEV_SERVER_HOST", default="localhost"),
         "dev_server_port": env.int("DJANGO_VITE_DEV_SERVER_PORT", default=5173),
     }
