@@ -31,6 +31,7 @@ export default function Index() {
                         Title:
                         <Input
                             className="mt-2"
+                            required
                             name="title"
                             value={data.title}
                             onChange={(e) => setData('title', e.target.value)}

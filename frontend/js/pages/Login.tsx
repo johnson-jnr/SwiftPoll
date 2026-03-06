@@ -42,6 +42,7 @@ const Login = () => {
                                                     id="email"
                                                     type="email"
                                                     name="login"
+                                                    required
                                                     placeholder="m@example.com"
                                                 />
                                                 {errors.login && (
