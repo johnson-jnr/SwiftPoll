@@ -9,6 +9,7 @@ const Nav = () => {
 
                 {user ? (
                     <>
+                        <Link href="/dashboard">Dashboard</Link>
                         <Link href="/signout">Logout</Link>
                     </>
                 ) : (

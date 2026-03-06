@@ -4,8 +4,8 @@ import axios from 'axios';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp, router } from '@inertiajs/react';
-import Layout from './components/Layout';
-import DashboardLayout from './components/DashboardLayout';
+import Layout from './layouts/Layout';
+import DashboardLayout from './layouts/DashboardLayout';
 
 import '../css/main.css';
 import '../css/style.sass';

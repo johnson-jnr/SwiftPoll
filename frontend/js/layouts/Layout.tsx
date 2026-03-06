@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
-import Nav from './Nav';
-import Footer from './Footer';
-import { Toaster } from './shadcn/sonner';
-
-type Message = { message: string; level_tag: string };
+import Nav from '../components/Nav';
+import Footer from '../components/Footer';
+import { Toaster } from '@/components/shadcn/sonner';
+import { Message } from '@/lib/types';
 
 const Layout = ({ children }) => {
     const { messages } = usePage().props as unknown as { messages: Message[] };

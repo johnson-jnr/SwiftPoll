@@ -14,13 +14,14 @@ import {
     DropdownMenuTrigger,
 } from '@/components/shadcn/dropdown-menu';
 import { Link } from '@inertiajs/react';
+import { Poll } from '@/lib/types';
 
 export default function PollMenu({
     showResults = true,
-    pollId,
+    poll,
 }: {
     showResults?: boolean;
-    pollId: string;
+    poll: Poll;
 }) {
     const [copied, setCopied] = useState(false);
 
@@ -49,9 +50,9 @@ export default function PollMenu({
                     )}
                     {copied ? 'Copied!' : 'Copy Poll Link'}
                 </DropdownMenuItem>
-                {showResults && pollId && (
+                {poll && poll.allow_public_results && showResults && (
                     <DropdownMenuItem asChild>
-                        <Link href={`/${pollId}/result`}>
+                        <Link href={`/${poll.public_id}/result`}>
                             <ChartNoAxesColumnIncreasing /> Show Results
                         </Link>
                     </DropdownMenuItem>

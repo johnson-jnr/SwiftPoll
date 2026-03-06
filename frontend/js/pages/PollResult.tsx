@@ -30,7 +30,7 @@ const PollResult = ({ public_id, poll }) => {
                         </CardDescription>
                     </div>
                     <CardAction>
-                        <PollMenu pollId={public_id} showResults={false} />
+                        <PollMenu poll={poll} showResults={false} />
                     </CardAction>
                 </CardHeader>
                 <CardContent>

@@ -30,14 +30,27 @@ import { Switch } from '@/components/shadcn/switch';
 import { Button } from '@/components/shadcn/button';
 import { Label } from '@/components/shadcn/label';
 import { Poll } from '@/lib/types';
+import { useForm } from '@inertiajs/react';
+import { Spinner } from '@/components/shadcn/spinner';
 
 const PollDialog = ({ poll }: { poll: Poll }) => {
-    const [isActive, setIsActive] = useState(poll.active);
-    const [oneVotePerIp, setOneVotePerIp] = useState(false);
-    const [showResults, setShowResults] = useState(false);
+    const [open, setOpen] = useState(false);
+    const { data, setData, errors, put, processing } = useForm({
+        id: poll.id,
+        active: poll.active,
+        allow_one_vote_per_ip: poll.allow_one_vote_per_ip,
+        allow_public_results: poll.allow_public_results,
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        put(`/${poll.public_id}/settings/`, {
+            onSuccess: () => setOpen(false),
+        });
+    };
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
@@ -48,52 +61,76 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{poll.title}</DialogTitle>
-                </DialogHeader>
-                <p className="text-sm text-muted-foreground">
-                    {poll.description}
-                </p>
-                <div className="flex flex-col gap-4 py-2">
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor={`active-${poll.title}`}>
-                            Poll Active
-                        </Label>
-                        <Switch
-                            id={`active-${poll.title}`}
-                            checked={isActive}
-                            onCheckedChange={setIsActive}
-                        />
+                <form onSubmit={handleSubmit}>
+                    <DialogHeader>
+                        <DialogTitle>{poll.title}</DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-muted-foreground">
+                        {poll.description}
+                    </p>
+                    <div className="flex flex-col gap-4 py-2 mt-4">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor={`active-${poll.title}`}>
+                                Poll Active
+                            </Label>
+                            <Switch
+                                id={`active-${poll.title}`}
+                                checked={data.active}
+                                onCheckedChange={(v) => setData('active', v)}
+                            />
+                            {errors.active && (
+                                <div className="mt-1 text-xs text-red-400 whitespace-pre-line">
+                                    {errors.active}
+                                </div>
+                            )}
+                        </div>
+                        {/* <div className="flex items-center justify-between">
+                            <Label htmlFor={`ip-${poll.title}`}>
+                                Allow only one vote per IP-Address
+                            </Label>
+                            <Switch
+                                id={`ip-${poll.title}`}
+                                checked={data.allow_one_vote_per_ip}
+                                onCheckedChange={(v) =>
+                                    setData('allow_one_vote_per_ip', v)
+                                }
+                            />
+                            {errors.allow_one_vote_per_ip && (
+                                <div className="mt-1 text-xs text-red-400 whitespace-pre-line">
+                                    {errors.allow_one_vote_per_ip}
+                                </div>
+                            )}
+                        </div> */}
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor={`results-${poll.title}`}>
+                                Allow public to view results
+                            </Label>
+                            <Switch
+                                id={`results-${poll.title}`}
+                                checked={data.allow_public_results}
+                                onCheckedChange={(v) =>
+                                    setData('allow_public_results', v)
+                                }
+                            />
+                            {errors.allow_public_results && (
+                                <div className="mt-1 text-xs text-red-400 whitespace-pre-line">
+                                    {errors.allow_public_results}
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor={`ip-${poll.title}`}>
-                            Allow only one vote per IP-Address
-                        </Label>
-                        <Switch
-                            id={`ip-${poll.title}`}
-                            checked={oneVotePerIp}
-                            onCheckedChange={setOneVotePerIp}
-                        />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor={`results-${poll.title}`}>
-                            Allow public to view results
-                        </Label>
-                        <Switch
-                            id={`results-${poll.title}`}
-                            checked={showResults}
-                            onCheckedChange={setShowResults}
-                        />
-                    </div>
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button onClick={() => console.log('foo')}>
-                        Save Changes
-                    </Button>
-                </DialogFooter>
+                    <DialogFooter className="mt-4">
+                        <DialogClose asChild>
+                            <Button variant="outline" type="button">
+                                Cancel
+                            </Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={processing}>
+                            {processing && <Spinner data-icon="inline-start" />}
+                            Save Changes
+                        </Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     );

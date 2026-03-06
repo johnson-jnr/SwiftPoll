@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from inertia import render
 from django.shortcuts import get_object_or_404, redirect
 from ipware import get_client_ip
-from polls.forms import PollForm, PollVoteForm
+from polls.forms import PollForm, PollSettingsForm, PollVoteForm
 from polls.models import Option, Poll, Vote
 from django.db.models import Count
 from allauth.account.forms import (
@@ -24,6 +24,7 @@ from allauth.account.views import INTERNAL_RESET_SESSION_KEY
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def home(request):
@@ -66,7 +67,10 @@ def poll_detail(request, public_id):
                 "description": poll.description,
                 "user": user,
                 "active": poll.active,
+                "public_id": poll.public_id,
                 "created_at": poll.created_at,
+                "allow_public_results": poll.allow_public_results,
+                "allow_one_vote_per_ip": poll.allow_one_vote_per_ip,
                 "options": [{"id": o.id, "text": o.text} for o in poll.options.all()],
             },
         },
@@ -267,10 +271,37 @@ def result(request, public_id):
 
 
 @login_required
+def poll_settings(request, public_id):
+    if request.method == "PUT":
+        poll = get_object_or_404(Poll, public_id=public_id)
+        data = json.loads(request.body)
+        form = PollSettingsForm(data=data)
+        if form.is_valid():
+            poll.active = form.cleaned_data["active"]
+            poll.allow_one_vote_per_ip = form.cleaned_data["allow_one_vote_per_ip"]
+            poll.allow_public_results = form.cleaned_data["allow_public_results"]
+            poll.save()
+            messages.success(request, "Poll settings updated successfully.")
+        else:
+            errors = {k: "\n".join(v) for k, v in form.errors.items()}
+            return render(request, "Dashborad", {"errors": errors})
+    return redirect("dashboard")
+
+
+@login_required
 def dashboard(request):
     polls = (
         Poll.objects.filter(user=request.user)
-        .values("title", "description", "active", "public_id", "created_at")
+        .values(
+            "id",
+            "title",
+            "description",
+            "active",
+            "public_id",
+            "created_at",
+            "allow_public_results",
+            "allow_one_vote_per_ip",
+        )
         .annotate(total_vote=Count("votes"))
     )
     total_votes = sum(poll["total_vote"] for poll in polls)

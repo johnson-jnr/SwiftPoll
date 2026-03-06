@@ -16,9 +16,13 @@ class Poll(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
     )
-    active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # settings
+    active = models.BooleanField(default=True)
+    allow_one_vote_per_ip = models.BooleanField(default=True)
+    allow_public_results = models.BooleanField(default=True)
 
 
 class Option(models.Model):

@@ -39,6 +39,7 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),
+    path("<str:public_id>/settings/", views.poll_settings, name="poll_settings"),
     path("<str:public_id>/vote/", views.vote, name="vote"),
     path("<str:public_id>/result/", views.result, name="result"),
     path("", views.home, name="home"),

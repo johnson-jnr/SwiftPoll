@@ -17,8 +17,9 @@ import { Spinner } from '@/components/shadcn/spinner';
 import VoteSuccessDialog from '@/components/VoteSuccessDialog';
 import { useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Poll } from '@/lib/types';
 
-const PollDetail = ({ poll, public_id }) => {
+const PollDetail = ({ poll, public_id }: { poll: Poll; public_id: string }) => {
     const author = poll.user ? `user #${poll.user.username}` : 'a guest';
     const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -56,7 +57,7 @@ const PollDetail = ({ poll, public_id }) => {
                             </CardDescription>
                         </div>
                         <CardAction>
-                            <PollMenu pollId={public_id} />
+                            <PollMenu poll={poll} />
                         </CardAction>
                     </CardHeader>
                     <CardContent className="space-y-4">
