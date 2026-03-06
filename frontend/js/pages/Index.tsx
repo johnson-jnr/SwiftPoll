@@ -10,8 +10,6 @@ import { Field, FieldLabel, FieldError } from '@/components/shadcn/field';
 import {
     Card,
     CardContent,
-    CardHeader,
-    CardTitle,
 } from '@/components/shadcn/card';
 export default function Index() {
     const { data, setData, post, processing, errors, setError, clearErrors } =
@@ -36,12 +34,10 @@ export default function Index() {
 
     return (
         <div className="max-w-xl mx-auto mt-8">
+            <h1 className="text-2xl font-semibold mb-4">Create a Poll</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Create a Poll</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-6 pt-6">
                         <Field>
                             <FieldLabel htmlFor="title">Title</FieldLabel>
                             <Input

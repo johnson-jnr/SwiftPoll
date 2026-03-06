@@ -19,7 +19,7 @@ import { getCsrfToken } from '@/lib/utils';
 
 const Signup = () => {
     return (
-        <div className="flex mt-14 w-full items-center justify-center p-6 md:p-10">
+        <div className="flex mt-8 w-full items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-lg">
                 <Card>
                     <CardHeader>

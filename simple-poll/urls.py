@@ -40,7 +40,7 @@ urlpatterns = [
         views.password_reset_from_key,
         name="account_reset_password_from_key",
     ),
-    # path("accounts/", include("allauth.urls")),
+    path("accounts/", include("allauth.socialaccount.providers.google.urls")),
     path("<str:public_id>/", views.poll_detail, name="poll_detail"),
     path("<str:public_id>/settings/", views.poll_settings, name="poll_settings"),
     path("<str:public_id>/vote/", views.vote, name="vote"),
