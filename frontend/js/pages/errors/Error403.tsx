@@ -1,9 +1,10 @@
 import { Button } from '@/components/shadcn/button';
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 
-const Error403 = () => (
-    <>
-        <Head title="Access Denied" />
+const Error403 = () => {
+    useTitle('Access Denied');
+    return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4">
             <h1 className="text-8xl font-bold text-muted-foreground/30">403</h1>
             <h2 className="text-2xl font-semibold">Access denied</h2>
@@ -14,7 +15,7 @@ const Error403 = () => (
                 <Link href="/">Go Home</Link>
             </Button>
         </div>
-    </>
-);
+    );
+};
 
 export default Error403;

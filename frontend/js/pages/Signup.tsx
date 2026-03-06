@@ -14,14 +14,15 @@ import {
 } from '@/components/shadcn/field';
 import { Input } from '@/components/shadcn/input';
 import { Spinner } from '@/components/shadcn/spinner';
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import { getCsrfToken } from '@/lib/utils';
 
 const Signup = () => {
+    useTitle('Sign Up');
+
     return (
-        <>
-            <Head title="Sign Up" />
-            <div className="flex mt-8 w-full items-center justify-center p-6 md:p-10">
+        <div className="flex mt-8 w-full items-center justify-center p-6 md:p-10">
                 <div className="w-full max-w-lg">
                     <Card>
                         <CardHeader>
@@ -150,7 +151,6 @@ const Signup = () => {
                     </Card>
                 </div>
             </div>
-        </>
     );
 };
 

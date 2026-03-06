@@ -1,4 +1,5 @@
-import { Head, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import PollOptions from '@/components/PollOptions';
 import { Button } from '@/components/shadcn/button';
 import { Input } from '@/components/shadcn/input';
@@ -29,95 +30,92 @@ export default function Index() {
         post('/');
     };
 
+    useTitle('Create a Poll');
+
     return (
-        <>
-            <Head title="Create a Poll" />
-            <div className="max-w-xl mx-auto mt-8">
-                <h1 className="text-2xl font-semibold mb-4">Create a Poll</h1>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <Card>
-                        <CardContent className="space-y-6 pt-6">
-                            <Field>
-                                <FieldLabel htmlFor="title">Title</FieldLabel>
-                                <Input
-                                    id="title"
-                                    required
-                                    name="title"
-                                    value={data.title}
-                                    onChange={(e) =>
-                                        setData('title', e.target.value)
-                                    }
-                                    placeholder="Type your Title"
-                                />
-                                <FieldError>{errors.title}</FieldError>
-                            </Field>
+        <div className="max-w-xl mx-auto mt-8">
+            <h1 className="text-2xl font-semibold mb-4">Create a Poll</h1>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <Card>
+                    <CardContent className="space-y-6 pt-6">
+                        <Field>
+                            <FieldLabel htmlFor="title">Title</FieldLabel>
+                            <Input
+                                id="title"
+                                required
+                                name="title"
+                                value={data.title}
+                                onChange={(e) =>
+                                    setData('title', e.target.value)
+                                }
+                                placeholder="Type your Title"
+                            />
+                            <FieldError>{errors.title}</FieldError>
+                        </Field>
 
-                            <Field>
-                                <FieldLabel htmlFor="description">
-                                    Description (optional)
-                                </FieldLabel>
-                                <Textarea
-                                    id="description"
-                                    name="description"
-                                    value={data.description}
-                                    onChange={(e) =>
-                                        setData('description', e.target.value)
-                                    }
-                                    placeholder="Type your Description"
-                                />
-                                <FieldError>{errors.description}</FieldError>
-                            </Field>
+                        <Field>
+                            <FieldLabel htmlFor="description">
+                                Description (optional)
+                            </FieldLabel>
+                            <Textarea
+                                id="description"
+                                name="description"
+                                value={data.description}
+                                onChange={(e) =>
+                                    setData('description', e.target.value)
+                                }
+                                placeholder="Type your Description"
+                            />
+                            <FieldError>{errors.description}</FieldError>
+                        </Field>
 
-                            <Field>
-                                <PollOptions
-                                    options={data.options}
-                                    onChange={(options) =>
-                                        setData('options', options)
-                                    }
-                                />
-                                <FieldError>{errors.options}</FieldError>
-                            </Field>
-                        </CardContent>
-                    </Card>
+                        <Field>
+                            <PollOptions
+                                options={data.options}
+                                onChange={(options) =>
+                                    setData('options', options)
+                                }
+                            />
+                            <FieldError>{errors.options}</FieldError>
+                        </Field>
+                    </CardContent>
+                </Card>
 
-                    <Card>
-                        <CardContent className="flex flex-col gap-4 pt-6">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="active">Poll Active</Label>
-                                <Switch
-                                    id="active"
-                                    checked={data.active}
-                                    onCheckedChange={(v) =>
-                                        setData('active', v)
-                                    }
-                                />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="allow_public_results">
-                                    Allow public to view results
-                                </Label>
-                                <Switch
-                                    id="allow_public_results"
-                                    checked={data.allow_public_results}
-                                    onCheckedChange={(v) =>
-                                        setData('allow_public_results', v)
-                                    }
-                                />
-                            </div>
-                        </CardContent>
-                    </Card>
+                <Card>
+                    <CardContent className="flex flex-col gap-4 pt-6">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="active">Poll Active</Label>
+                            <Switch
+                                id="active"
+                                checked={data.active}
+                                onCheckedChange={(v) => setData('active', v)}
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="allow_public_results">
+                                Allow public to view results
+                            </Label>
+                            <Switch
+                                id="allow_public_results"
+                                checked={data.allow_public_results}
+                                onCheckedChange={(v) =>
+                                    setData('allow_public_results', v)
+                                }
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
 
-                    <Button
-                        type="submit"
-                        size="lg"
-                        className="w-full"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner data-icon="inline-start" />}
-                        Create Poll
-                    </Button>
-                </form>
-            </div>
-        </>
+                <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full"
+                    disabled={processing}
+                >
+                    {processing && <Spinner data-icon="inline-start" />}
+                    Create Poll
+                </Button>
+            </form>
+        </div>
     );
 }

@@ -15,7 +15,8 @@ import PollMenu from '@/components/PollMenu';
 import { Button } from '@/components/shadcn/button';
 import { Spinner } from '@/components/shadcn/spinner';
 import VoteSuccessDialog from '@/components/VoteSuccessDialog';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import { useState } from 'react';
 import { Poll } from '@/lib/types';
 
@@ -38,10 +39,10 @@ const PollDetail = ({ poll, public_id }: { poll: Poll; public_id: string }) => {
         });
     };
 
+    useTitle(poll.title);
+
     return (
-        <>
-            <Head title={poll.title} />
-            <div className="max-w-2xl mx-auto mt-20">
+        <div className="max-w-2xl mx-auto mt-20">
                 {errors.general && (
                     <div className="mb-4 text-sm text-red-400 whitespace-pre-line">
                         {errors.general}
@@ -126,7 +127,6 @@ const PollDetail = ({ poll, public_id }: { poll: Poll; public_id: string }) => {
                     allowed.
                 </p>
             </div>
-        </>
     );
 };
 

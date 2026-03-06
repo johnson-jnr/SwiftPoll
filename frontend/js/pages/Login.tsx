@@ -7,16 +7,17 @@ import {
 } from '@/components/shadcn/card';
 import { Field, FieldGroup, FieldLabel } from '@/components/shadcn/field';
 import { Input } from '@/components/shadcn/input';
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import { Button } from '@/components/shadcn/button';
 import { Spinner } from '@/components/shadcn/spinner';
 import { getCsrfToken } from '@/lib/utils';
 
 const Login = () => {
+    useTitle('Login');
+
     return (
-        <>
-            <Head title="Login" />
-            <div className="flex mt-8 w-full items-center justify-center p-6 md:p-10">
+        <div className="flex mt-8 w-full items-center justify-center p-6 md:p-10">
                 <div className="w-full max-w-lg">
                     <div className="flex flex-col gap-6">
                         <Card>
@@ -126,7 +127,6 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </>
     );
 };
 

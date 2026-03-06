@@ -10,7 +10,8 @@ import {
 import PollMenu from '@/components/PollMenu';
 import { Button } from '@/components/shadcn/button';
 import { ArrowLeft } from 'lucide-react';
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import { Separator } from '@radix-ui/react-dropdown-menu';
 import { format } from 'timeago.js';
 import { POLL_PALETTE } from '@/lib/pollColors';
@@ -19,10 +20,10 @@ import PollPieChart from '@/components/PollPieChart';
 const PollResult = ({ public_id, poll }) => {
     const author = poll.user ? `user #${poll.user.username}` : 'a guest';
 
+    useTitle(poll.title);
+
     return (
-        <>
-            <Head title={poll.title} />
-            <div className="max-w-4xl mx-auto mt-20">
+        <div className="max-w-4xl mx-auto mt-20">
                 <Card>
                     <CardHeader className="relative z-10">
                         <div>
@@ -113,7 +114,6 @@ const PollResult = ({ public_id, poll }) => {
                     </CardFooter>
                 </Card>
             </div>
-        </>
     );
 };
 

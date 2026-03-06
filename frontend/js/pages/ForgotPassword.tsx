@@ -12,7 +12,8 @@ import {
     FieldGroup,
     FieldLabel,
 } from '@/components/shadcn/field';
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import { Input } from '@/components/shadcn/input';
 import { Spinner } from '@/components/shadcn/spinner';
 import { useState } from 'react';
@@ -20,10 +21,10 @@ import { useState } from 'react';
 const ForgotPassword = () => {
     const [sent, setSent] = useState(false);
 
+    useTitle('Forgot Password');
+
     return (
-        <>
-            <Head title="Forgot Password" />
-            <div className="flex mt-14 w-full items-center justify-center p-6 md:p-10">
+        <div className="flex mt-14 w-full items-center justify-center p-6 md:p-10">
                 <div className="w-full max-w-lg">
                     <div className="flex flex-col gap-6">
                         <Card>
@@ -107,7 +108,6 @@ const ForgotPassword = () => {
                     </div>
                 </div>
             </div>
-        </>
     );
 };
 

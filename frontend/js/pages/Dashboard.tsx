@@ -30,7 +30,8 @@ import { Switch } from '@/components/shadcn/switch';
 import { Button } from '@/components/shadcn/button';
 import { Label } from '@/components/shadcn/label';
 import { Poll } from '@/lib/types';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
+import { useTitle } from '@/hooks/useTitle';
 import { Spinner } from '@/components/shadcn/spinner';
 
 const PollDialog = ({ poll }: { poll: Poll }) => {
@@ -161,10 +162,10 @@ const Dashboard = ({
         },
     ];
 
+    useTitle('Dashboard');
+
     return (
-        <>
-            <Head title="Dashboard" />
-            <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col gap-4 p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     {stats.map((stat) => (
                         <Card
@@ -274,7 +275,6 @@ const Dashboard = ({
                     </CardContent>
                 </Card>
             </div>
-        </>
     );
 };
 
