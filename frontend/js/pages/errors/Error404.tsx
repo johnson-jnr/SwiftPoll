@@ -1,4 +1,5 @@
 import { Button } from '@/components/shadcn/button';
+import { Link } from '@inertiajs/react';
 
 const Error404 = () => (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4">
@@ -8,7 +9,7 @@ const Error404 = () => (
             The page you're looking for doesn't exist or has been moved.
         </p>
         <Button asChild>
-            <a href="/">Go Home</a>
+            <Link href="/">Go Home</Link>
         </Button>
     </div>
 );

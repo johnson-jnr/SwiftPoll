@@ -15,7 +15,6 @@ import {
     SidebarTrigger,
 } from '@/components/shadcn/sidebar';
 import { Message } from '@/lib/types';
-import { ModeToggle } from '@/components/ModeToggle';
 import { useEffect } from 'react';
 import { toast, Toaster } from 'sonner';
 
@@ -64,7 +63,6 @@ const DashboardLayout = ({ children }) => {
                             </BreadcrumbList>
                         </Breadcrumb>
                         <div className="ml-auto flex items-center gap-2">
-                            <ModeToggle />
                             <NavUser user={user} />
                         </div>
                     </header>

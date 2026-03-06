@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarHeader,
@@ -13,6 +14,7 @@ import {
 } from '@/components/shadcn/sidebar';
 import { IconInnerShadowTop, IconChartBar } from '@tabler/icons-react';
 import { Link } from '@inertiajs/react';
+import { ModeToggle } from '@/components/ModeToggle';
 
 const navItems = [
     { title: 'Polls', url: '/dashboard/', isActive: true, icon: IconChartBar },
@@ -60,6 +62,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <SidebarFooter className="p-4 items-end">
+                <ModeToggle />
+            </SidebarFooter>
             <SidebarRail />
         </Sidebar>
     );

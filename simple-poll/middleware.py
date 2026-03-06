@@ -1,3 +1,4 @@
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.messages import get_messages
 from inertia import share
 
@@ -9,11 +10,14 @@ class DataShareMiddleware(object):
     def __call__(self, request):
         user = None
         if request.user.is_authenticated:
+            social = SocialAccount.objects.filter(
+                user=request.user, provider="google"
+            ).first()
             user = {
                 "id": request.user.id,
                 "name": request.user.get_full_name() or request.user.username,
                 "email": request.user.email,
-                "avatar": "",
+                "avatar": social.extra_data.get("picture", "") if social else "",
             }
         messages = []
         for message in get_messages(request):
