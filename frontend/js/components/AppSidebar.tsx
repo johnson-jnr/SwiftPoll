@@ -12,6 +12,7 @@ import {
     SidebarRail,
 } from '@/components/shadcn/sidebar';
 import { IconInnerShadowTop, IconChartBar } from '@tabler/icons-react';
+import { Link } from '@inertiajs/react';
 
 const navItems = [
     { title: 'Polls', url: '/dashboard/', isActive: true, icon: IconChartBar },
@@ -27,12 +28,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             asChild
                             className="data-[slot=sidebar-menu-button]:p-1.5!"
                         >
-                            <a href="/">
+                            <Link href="/">
                                 <IconInnerShadowTop className="size-5!" />
                                 <span className="text-base font-semibold">
                                     Simple Poll
                                 </span>
-                            </a>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -48,10 +49,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                         asChild
                                         isActive={item.isActive}
                                     >
-                                        <a href={item.url}>
+                                        <Link href={item.url}>
                                             {item.icon && <item.icon />}
                                             {item.title}
-                                        </a>
+                                        </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}

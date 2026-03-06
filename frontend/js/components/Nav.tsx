@@ -7,7 +7,7 @@ const Nav = () => {
         <div className="py-4 px-10">
             <nav className="flex justify-between">
                 <div className="flex items-center space-x-4">
-                    <Link href="/">Home page</Link>
+                    <Link href="/">Home</Link>
 
                     {user ? (
                         <>

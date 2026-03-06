@@ -8,6 +8,7 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from './shadcn/input-group';
+import { FieldLabel } from './shadcn/field';
 
 interface Props {
     options: string[];
@@ -35,29 +36,27 @@ export default function PollOptions({ options, onChange }: Props) {
 
     return (
         <div>
-            <label>
-                Options:
-                <div className="space-y-2">
-                    {options.map((option, index) => (
-                        <InputGroup className="mt-2" key={index}>
-                            <InputGroupInput
-                                name="options"
-                                value={option}
-                                onChange={(e) => handleChange(e, index)}
-                                placeholder={`Option ${index + 1}`}
-                            />
-                            {options.length > 1 && (
-                                <InputGroupAddon align="inline-end">
-                                    <X
-                                        className="cursor-pointer"
-                                        onClick={() => removeOption(index)}
-                                    />
-                                </InputGroupAddon>
-                            )}
-                        </InputGroup>
-                    ))}
-                </div>
-            </label>
+            <FieldLabel htmlFor="options">Options:</FieldLabel>
+            <div className="space-y-2">
+                {options.map((option, index) => (
+                    <InputGroup id="options" className="mt-2" key={index}>
+                        <InputGroupInput
+                            name="options"
+                            value={option}
+                            onChange={(e) => handleChange(e, index)}
+                            placeholder={`Option ${index + 1}`}
+                        />
+                        {options.length > 1 && (
+                            <InputGroupAddon align="inline-end">
+                                <X
+                                    className="cursor-pointer"
+                                    onClick={() => removeOption(index)}
+                                />
+                            </InputGroupAddon>
+                        )}
+                    </InputGroup>
+                ))}
+            </div>
             <Button
                 className={cn('mt-2', {
                     'disabled:pointer-events-none disabled:opacity-50':

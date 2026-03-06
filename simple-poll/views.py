@@ -33,15 +33,20 @@ def home(request):
         data = json.loads(request.body)
         form = PollForm(data)
         if form.is_valid():
-            title = form.cleaned_data["title"]
-            description = form.cleaned_data["description"]
             options = [o.strip() for o in data.get("options", []) if o.strip()]
             user = request.user if request.user.is_authenticated else None
-            poll = Poll.objects.create(title=title, description=description, user=user)
+            poll = Poll.objects.create(
+                title=form.cleaned_data["title"],
+                description=form.cleaned_data["description"],
+                allow_public_results=form.cleaned_data["allow_public_results"],
+                active=form.cleaned_data["active"],
+                user=user,
+            )
 
             Option.objects.bulk_create(
                 [Option(poll=poll, text=option) for option in options]
             )
+            messages.success("Poll created successfully!")
             return redirect("poll_detail", public_id=poll.public_id)
         else:
             return render(request, "Index", {"errors": form.errors})
@@ -53,6 +58,10 @@ def poll_detail(request, public_id):
         Poll.objects.prefetch_related("options"),
         public_id=public_id,
     )
+    is_owner = request.user.is_authenticated and poll.user == request.user
+    if not poll.active and not is_owner:
+        return render(request, "PollNotActive")
+
     user = None
     if poll.user:
         user = {"username": poll.user.username}
@@ -320,6 +329,7 @@ def dashboard(request):
             "allow_one_vote_per_ip",
         )
         .annotate(total_vote=Count("votes"))
+        .order_by("-created_at")
     )
     total_votes = sum(poll["total_vote"] for poll in polls)
     return render(request, "Dashboard", {"polls": polls, "total_votes": total_votes})

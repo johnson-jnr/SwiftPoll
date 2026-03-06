@@ -24,6 +24,9 @@ class Poll(models.Model):
     allow_one_vote_per_ip = models.BooleanField(default=True)
     allow_public_results = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ["-created_at"]
+
 
 class Option(models.Model):
     text = models.CharField(max_length=200)

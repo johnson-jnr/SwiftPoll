@@ -9,6 +9,8 @@ class PollForm(forms.ModelForm):
         fields = [
             "title",
             "description",
+            "allow_public_results",
+            "active",
         ]
 
 
