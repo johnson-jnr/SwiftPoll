@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { SearchForm } from '@/components/SearchForm';
-import { VersionSwitcher } from '@/components/VersionSwitcher';
 import {
     Sidebar,
     SidebarContent,
@@ -13,24 +11,33 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from '@/components/shadcn/sidebar';
+import { IconInnerShadowTop, IconChartBar } from '@tabler/icons-react';
 
-// This is sample data.
-const data = {
-    versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
-};
-
-const navItems = [{ title: 'Polls', url: '/dashboard/', isActive: true }];
+const navItems = [
+    { title: 'Polls', url: '/dashboard/', isActive: true, icon: IconChartBar },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar {...props}>
-            <SidebarHeader>
-                <VersionSwitcher
-                    versions={data.versions}
-                    defaultVersion={data.versions[0]}
-                />
-                <SearchForm />
+            <SidebarHeader className="h-16 justify-center">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            className="pointer-events-none data-[slot=sidebar-menu-button]:p-1.5!"
+                        >
+                            <div>
+                                <IconInnerShadowTop className="size-5!" />
+                                <span className="text-base font-semibold">
+                                    Simple Poll
+                                </span>
+                            </div>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
+
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupContent>
@@ -41,7 +48,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                         asChild
                                         isActive={item.isActive}
                                     >
-                                        <a href={item.url}>{item.title}</a>
+                                        <a href={item.url}>
+                                            {item.icon && <item.icon />}
+                                            {item.title}
+                                        </a>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
