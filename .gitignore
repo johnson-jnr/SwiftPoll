@@ -25,3 +25,6 @@ node_modules/
 
 # Notes
 *.md
+
+# VS Code
+.vscode/
