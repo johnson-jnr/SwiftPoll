@@ -17,39 +17,38 @@ const ConfirmEmail = () => {
     };
 
     return (
-        <div className="flex mt-14 w-full items-center justify-center p-6 md:p-10">
-            <div className="w-full max-w-lg">
-                <div className="flex flex-col gap-6">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Confirm Email Address</CardTitle>
-                            {error ? (
-                                <CardDescription className="text-red-400">
-                                    {error}
-                                </CardDescription>
-                            ) : (
-                                <CardDescription>
-                                    Please confirm that <strong>{email}</strong> is an email
-                                    address for user <strong>{username}</strong>.
-                                </CardDescription>
-                            )}
-                        </CardHeader>
-                        {!error && (
-                            <CardContent>
-                                <Form action="" method="post">
-                                    {({ processing }) => (
-                                        <Button type="submit" disabled={processing}>
-                                            {processing && (
-                                                <Spinner data-icon="inline-start" />
-                                            )}
-                                            Confirm
-                                        </Button>
-                                    )}
-                                </Form>
-                            </CardContent>
+        <div className="flex h-full items-center px-4 sm:px-0">
+            <div className="w-full max-w-lg mx-auto">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Confirm Email Address</CardTitle>
+                        {error ? (
+                            <CardDescription className="text-red-400">
+                                {error}
+                            </CardDescription>
+                        ) : (
+                            <CardDescription>
+                                Please confirm that <strong>{email}</strong> is
+                                an email address for user{' '}
+                                <strong>{username}</strong>.
+                            </CardDescription>
                         )}
-                    </Card>
-                </div>
+                    </CardHeader>
+                    {!error && (
+                        <CardContent>
+                            <Form action="" method="post">
+                                {({ processing }) => (
+                                    <Button type="submit" disabled={processing} className="w-full">
+                                        {processing && (
+                                            <Spinner data-icon="inline-start" />
+                                        )}
+                                        Confirm
+                                    </Button>
+                                )}
+                            </Form>
+                        </CardContent>
+                    )}
+                </Card>
             </div>
         </div>
     );
