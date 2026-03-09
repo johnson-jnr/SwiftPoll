@@ -1,24 +1,30 @@
 import {
     Card,
-    CardHeader,
-    CardDescription,
-    CardAction,
     CardContent,
-    CardTitle,
+    CardDescription,
     CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/shadcn/card';
-import PollMenu from '@/components/PollMenu';
 import { Button } from '@/components/shadcn/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Link as LinkIcon, Check } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import { useTitle } from '@/hooks/useTitle';
 import { Separator } from '@radix-ui/react-dropdown-menu';
 import { format } from 'timeago.js';
 import { POLL_PALETTE } from '@/lib/pollColors';
 import PollPieChart from '@/components/PollPieChart';
+import { useState } from 'react';
 
 const PollResult = ({ public_id, poll }) => {
     const author = poll.user ? `user #${poll.user.username}` : 'a guest';
+    const [copied, setCopied] = useState(false);
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1000);
+    }
 
     useTitle(poll.title);
 
@@ -32,9 +38,6 @@ const PollResult = ({ public_id, poll }) => {
                             by {author} · {format(poll.created_at)}
                         </CardDescription>
                     </div>
-                    <CardAction>
-                        <PollMenu poll={poll} showResults={false} />
-                    </CardAction>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -92,7 +95,7 @@ const PollResult = ({ public_id, poll }) => {
                         </div>
 
                         {/* Right: pie chart — pulled up to visually center on full card height */}
-                        <div className="relative sm:-top-22">
+                        <div className="relative sm:-top-24">
                             <PollPieChart
                                 options={poll.options}
                                 totalVotes={poll.total_vote}
@@ -100,11 +103,19 @@ const PollResult = ({ public_id, poll }) => {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="gap-2">
                     <Button variant="outline" asChild>
                         <Link href={`/${public_id}`}>
                             <ArrowLeft /> Back to Poll
                         </Link>
+                    </Button>
+                    <Button variant="outline" onClick={copyLink}>
+                        {copied ? (
+                            <Check className="text-green-500" />
+                        ) : (
+                            <LinkIcon />
+                        )}
+                        {copied ? 'Copied!' : 'Share Results'}
                     </Button>
                 </CardFooter>
             </Card>

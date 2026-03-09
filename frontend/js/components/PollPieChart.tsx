@@ -70,7 +70,7 @@ export default function PollPieChart({
     if (totalVotes === 0) {
         return (
             <div className="w-full aspect-square flex items-center justify-center">
-                <div className="w-4/5 aspect-square rounded-full border-2 border-border flex items-center justify-center p-6">
+                <div className="w-[75%] aspect-square rounded-full border-2 border-border flex items-center justify-center p-6">
                     <p className="text-sm text-muted-foreground text-center">
                         A pie chart will be rendered here.
                     </p>
