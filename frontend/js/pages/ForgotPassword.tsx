@@ -24,90 +24,86 @@ const ForgotPassword = () => {
     useTitle('Forgot Password');
 
     return (
-        <div className="flex mt-14 w-full items-center justify-center p-6 md:p-10">
-                <div className="w-full max-w-lg">
-                    <div className="flex flex-col gap-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Forgot your password?</CardTitle>
-                                <CardDescription>
-                                    Enter your email and we&apos;ll send you a
-                                    link to reset your password
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {sent ? (
-                                    <div className="flex flex-col gap-4">
-                                        <p className="text-sm text-green-600">
-                                            We have sent you an email. If you
-                                            have not received it please check
-                                            your spam folder.
-                                        </p>
-                                        <Button asChild variant="outline">
-                                            <Link href="/login">
-                                                Back to login
-                                            </Link>
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <Form
-                                        action=""
-                                        method="post"
-                                        onSuccess={() => setSent(true)}
-                                    >
-                                        {({ processing, errors }) => (
-                                            <FieldGroup>
-                                                {errors.general && (
-                                                    <div className="text-sm text-red-400">
-                                                        {errors.general}
-                                                    </div>
-                                                )}
-                                                <Field>
-                                                    <FieldLabel htmlFor="email">
-                                                        Email
-                                                    </FieldLabel>
-                                                    <Input
-                                                        id="email"
-                                                        name="email"
-                                                        type="email"
-                                                        placeholder="m@example.com"
-                                                        required
-                                                    />
-                                                    {errors.email && (
-                                                        <div className="mt-1 text-xs text-red-400">
-                                                            {errors.email}
-                                                        </div>
-                                                    )}
-                                                </Field>
-                                                <Field>
-                                                    <Button
-                                                        type="submit"
-                                                        disabled={processing}
-                                                    >
-                                                        {processing && (
-                                                            <Spinner data-icon="inline-start" />
-                                                        )}
-                                                        Send Reset Link
-                                                    </Button>
-                                                    <FieldDescription className="text-center">
-                                                        Remember your password?
-                                                        <Link
-                                                            className="ml-1"
-                                                            href="/login"
-                                                        >
-                                                            Back to login
-                                                        </Link>
-                                                    </FieldDescription>
-                                                </Field>
-                                            </FieldGroup>
+        <div className="flex h-full items-center px-4 sm:px-0">
+            <div className="w-full max-w-lg mx-auto">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Forgot your password?</CardTitle>
+                        <CardDescription>
+                            Enter your email and we&apos;ll send you a link to
+                            reset your password
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {sent ? (
+                            <div className="flex flex-col gap-4">
+                                <p className="text-sm text-green-600">
+                                    We have sent you an email. If you have not
+                                    received it please check your spam folder.
+                                </p>
+                                <Button asChild variant="outline" className="w-full">
+                                    <Link href="/login">Back to login</Link>
+                                </Button>
+                            </div>
+                        ) : (
+                            <Form
+                                action=""
+                                method="post"
+                                onSuccess={() => setSent(true)}
+                            >
+                                {({ processing, errors }) => (
+                                    <FieldGroup>
+                                        {errors.general && (
+                                            <div className="text-sm text-red-400">
+                                                {errors.general}
+                                            </div>
                                         )}
-                                    </Form>
+                                        <Field>
+                                            <FieldLabel htmlFor="email">
+                                                Email
+                                            </FieldLabel>
+                                            <Input
+                                                id="email"
+                                                name="email"
+                                                type="email"
+                                                placeholder="m@example.com"
+                                                required
+                                            />
+                                            {errors.email && (
+                                                <div className="mt-1 text-xs text-red-400">
+                                                    {errors.email}
+                                                </div>
+                                            )}
+                                        </Field>
+                                        <Field>
+                                            <Button
+                                                type="submit"
+                                                disabled={processing}
+                                                className="w-full"
+                                            >
+                                                {processing && (
+                                                    <Spinner data-icon="inline-start" />
+                                                )}
+                                                Send Reset Link
+                                            </Button>
+                                            <FieldDescription className="text-center">
+                                                Remember your password?
+                                                <Link
+                                                    className="ml-1"
+                                                    href="/login"
+                                                >
+                                                    Back to login
+                                                </Link>
+                                            </FieldDescription>
+                                        </Field>
+                                    </FieldGroup>
                                 )}
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
+                            </Form>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
+        </div>
     );
 };
 
