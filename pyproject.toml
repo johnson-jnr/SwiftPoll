@@ -15,4 +15,5 @@ dependencies = [
     "nanoid>=2.0.0",
     "django-ipware>=7.0.1",
     "django-anymail[resend]>=14.0",
+    "psycopg[binary]>=3.3.3",
 ]
