@@ -2,6 +2,6 @@ import { useEffect } from 'react';
 
 export function useTitle(title: string) {
     useEffect(() => {
-        document.title = `${title} - Swift Poll`;
+        document.title = `${title} - SwiftPoll`;
     }, [title]);
 }

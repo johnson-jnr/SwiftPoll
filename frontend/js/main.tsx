@@ -27,6 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setup({ el, App, props }) {
             createRoot(el).render(<App {...props} />);
         },
-        title: (title) => `${title} - Swift Poll`,
+        title: (title) => `${title} - SwiftPoll`,
     });
 });
