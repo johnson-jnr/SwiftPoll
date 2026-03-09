@@ -29,7 +29,7 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("signout/", views.signout, name="signout"),
     path("forgot-password/", views.forgot_password, name="forgot_passsword"),
-    path("admin/", admin.site.urls),
+    path("backoffice/", admin.site.urls),
     path(
         "accounts/confirm-email/<str:key>/",
         views.confirm_email,

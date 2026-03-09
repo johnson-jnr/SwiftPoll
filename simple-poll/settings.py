@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "polls",
     "accounts",
     # Third party
+    "anymail",
     "django_vite",
     "inertia",
     "allauth",
@@ -141,7 +142,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# resend
+EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+ANYMAIL = {
+    "RESEND_API_KEY": os.environ.get("RESEND_API_KEY"),
+}
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
 
 AUTH_USER_MODEL = "accounts.User"
 

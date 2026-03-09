@@ -14,4 +14,5 @@ dependencies = [
     "gunicorn>=23.0.0",
     "nanoid>=2.0.0",
     "django-ipware>=7.0.1",
+    "django-anymail[resend]>=14.0",
 ]
