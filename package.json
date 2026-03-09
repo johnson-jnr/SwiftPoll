@@ -5,9 +5,9 @@
     "dev": "TAILWIND_MODE=watch vite",
     "build": "TAILWIND_MODE=build vite build"
   },
-  "overrides": {
-    "vite": {
-      "rollup": "npm:@rollup/wasm-node"
+  "pnpm": {
+    "overrides": {
+      "vite>rollup": "npm:@rollup/wasm-node"
     }
   },
   "dependencies": {

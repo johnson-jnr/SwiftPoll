@@ -166,115 +166,113 @@ const Dashboard = ({
 
     return (
         <div className="flex flex-1 flex-col gap-4 p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    {stats.map((stat) => (
-                        <Card
-                            key={stat.title}
-                            className="bg-linear-to-t from-primary/5 to-card shadow-xs dark:bg-card"
-                        >
-                            <CardHeader>
-                                <CardDescription>{stat.title}</CardDescription>
-                                <CardTitle className="text-3xl font-semibold tabular-nums">
-                                    {stat.value}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardFooter className="text-sm text-muted-foreground">
-                                {stat.description}
-                            </CardFooter>
-                        </Card>
-                    ))}
-                </div>
-                <Card className="mt-10">
-                    <CardHeader>
-                        <CardTitle>Your Polls</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {!polls.length ? (
-                            <div className="flex flex-col items-center gap-3 py-8 text-center">
-                                <p className="text-muted-foreground">
-                                    You have not created any polls yet.
-                                </p>
-                                <Button asChild>
-                                    <Link href="/"> Create a poll now </Link>
-                                </Button>
-                            </div>
-                        ) : (
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Active</TableHead>
-                                        <TableHead>Date Created</TableHead>
-                                        <TableHead>Number of Votes</TableHead>
-                                        <TableHead>Action</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {polls.map((poll, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell className="font-medium max-w-40">
-                                                <span className="truncate block">
-                                                    {poll.title}
-                                                </span>
-                                            </TableCell>
-                                            <TableCell>
-                                                {poll.active ? 'Yes' : 'No'}
-                                            </TableCell>
-                                            <TableCell>
-                                                {format(poll.created_at)}
-                                            </TableCell>
-                                            <TableCell>
-                                                {poll.total_vote}
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="relative h-6 w-20 px-2 text-xs justify-center group"
-                                                        asChild
-                                                    >
-                                                        <a
-                                                            href={`/${poll.public_id}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            View
-                                                            <ExternalLink
-                                                                size={10}
-                                                                className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                            />
-                                                        </a>
-                                                    </Button>
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="relative h-6 w-20 px-2 text-xs justify-center group"
-                                                        asChild
-                                                    >
-                                                        <a
-                                                            href={`/${poll.public_id}/result`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            Result
-                                                            <ExternalLink
-                                                                size={10}
-                                                                className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                            />
-                                                        </a>
-                                                    </Button>
-                                                    <PollDialog poll={poll} />
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        )}
-                    </CardContent>
-                </Card>
+            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                {stats.map((stat) => (
+                    <Card
+                        key={stat.title}
+                        className="bg-linear-to-t from-primary/5 to-card shadow-xs dark:bg-card"
+                    >
+                        <CardHeader>
+                            <CardDescription>{stat.title}</CardDescription>
+                            <CardTitle className="text-3xl font-semibold tabular-nums">
+                                {stat.value}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardFooter className="text-sm text-muted-foreground">
+                            {stat.description}
+                        </CardFooter>
+                    </Card>
+                ))}
             </div>
+            <Card className="mt-10">
+                <CardHeader>
+                    <CardTitle>Your Polls</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {!polls.length ? (
+                        <div className="flex flex-col items-center gap-3 py-8 text-center">
+                            <p className="text-muted-foreground">
+                                You have not created any polls yet.
+                            </p>
+                            <Button asChild>
+                                <Link href="/"> Create a poll now </Link>
+                            </Button>
+                        </div>
+                    ) : (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Title</TableHead>
+                                    <TableHead>Active</TableHead>
+                                    <TableHead>Date Created</TableHead>
+                                    <TableHead>Number of Votes</TableHead>
+                                    <TableHead></TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {polls.map((poll, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell className="font-medium max-w-50">
+                                            <span className="truncate block">
+                                                {poll.title}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell>
+                                            {poll.active ? 'Yes' : 'No'}
+                                        </TableCell>
+                                        <TableCell>
+                                            {format(poll.created_at)}
+                                        </TableCell>
+                                        <TableCell>{poll.total_vote}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="relative h-6 w-20 px-2 text-xs justify-center group"
+                                                    asChild
+                                                >
+                                                    <a
+                                                        href={`/${poll.public_id}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        View
+                                                        <ExternalLink
+                                                            size={10}
+                                                            className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        />
+                                                    </a>
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="relative h-6 w-20 px-2 text-xs justify-center group"
+                                                    asChild
+                                                >
+                                                    <a
+                                                        href={`/${poll.public_id}/result`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        Result
+                                                        <ExternalLink
+                                                            size={10}
+                                                            className="absolute right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        />
+                                                    </a>
+                                                </Button>
+                                                <PollDialog poll={poll} />
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
     );
 };
 
