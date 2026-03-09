@@ -120,7 +120,7 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                             )}
                         </div>
                     </div>
-                    <DialogFooter>
+                    <DialogFooter className="gap-1">
                         <DialogClose asChild>
                             <Button variant="outline" type="button">
                                 Cancel
@@ -165,7 +165,7 @@ const Dashboard = ({
     useTitle('Dashboard');
 
     return (
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="p-4">
             <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                 {stats.map((stat) => (
                     <Card
@@ -184,7 +184,7 @@ const Dashboard = ({
                     </Card>
                 ))}
             </div>
-            <Card className="mt-10">
+            <Card className="mt-14">
                 <CardHeader>
                     <CardTitle>Your Polls</CardTitle>
                 </CardHeader>
