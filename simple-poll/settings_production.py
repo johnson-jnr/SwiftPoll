@@ -24,6 +24,10 @@ USE_HTTPS_IN_ABSOLUTE_URLS = True
 
 # Update your allowed hosts and CSRF trusted origins here.
 ALLOWED_HOSTS = [
-    "*",
+    "getswiftpoll.com",
+    "www.getswiftpoll.com",
 ]
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = [
+    "https://getswiftpoll.com",
+    "https://www.getswiftpoll.com",
+]
