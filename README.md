@@ -12,7 +12,7 @@ Create and share polls in seconds.
 
 - **Create polls instantly** — Build a poll with a title, description, and as many options as you need, then share it with a single link.
 - **One vote per IP** — Protection ensures each person only votes once, keeping results fair without requiring accounts.
-- **Public results** — Toggle whether results are visible to voters after they cast their vote, with a live chart breakdown.
+- **Public results** — Toggle whether results are visible to voters after they cast their vote, with a chart breakdown.
 - **User dashboard** — Sign in to manage all your polls in one place — view responses, toggle poll settings, and track activity over time.
 
 ---
