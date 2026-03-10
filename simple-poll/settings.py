@@ -248,6 +248,7 @@ def immutable_file_test(path, url):
 
 
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
+WHITENOISE_ROOT = BASE_DIR / "public"
 
 IP_HASH_SECRET_KEY = env("IP_HASH_SECRET_KEY")
 GOOGLE_CALLBACK_URL = env("GOOGLE_CALLBACK_URL")
