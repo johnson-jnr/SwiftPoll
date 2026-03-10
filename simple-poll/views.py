@@ -46,7 +46,7 @@ def home(request):
             Option.objects.bulk_create(
                 [Option(poll=poll, text=option) for option in options]
             )
-            messages.success("Poll created successfully!")
+            messages.success(request, "Poll created successfully!")
             return redirect("poll_detail", public_id=poll.public_id)
         else:
             return render(request, "Index", {"errors": form.errors})
