@@ -23,11 +23,5 @@ SECURE_HSTS_PRELOAD = True
 USE_HTTPS_IN_ABSOLUTE_URLS = True
 
 # Update your allowed hosts and CSRF trusted origins here.
-ALLOWED_HOSTS = [
-    "getswiftpoll.com",
-    "www.getswiftpoll.com",
-]
-CSRF_TRUSTED_ORIGINS = [
-    "https://getswiftpoll.com",
-    "https://www.getswiftpoll.com",
-]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
