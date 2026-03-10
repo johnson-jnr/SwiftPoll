@@ -1,8 +1,10 @@
 # SwiftPoll
 
-Create and share polls in seconds. No signup required to vote.
+Create and share polls in seconds. 
 
-![SwiftPoll preview](https://placehold.co/1200x630?text=Swift+Poll)
+![SwiftPoll preview](docs/images/Screenshot%202026-03-10%20at%2023.20.58.png)
+
+![SwiftPoll preview](docs/images/Screenshot%202026-03-10%20at%2023.21.43.png)
 
 ---
 
