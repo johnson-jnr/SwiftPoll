@@ -27,6 +27,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 
+RESET_URL_KEY = "set-password"
+
 
 def home(request):
     if request.method == "POST":
@@ -198,9 +200,6 @@ def forgot_password(request):
             }
             return render(request, "ForgotPassword", {"errors": errors})
     return render(request, "ForgotPassword")
-
-
-RESET_URL_KEY = "set-password"
 
 
 def password_reset_from_key(request, uidb36, key):
