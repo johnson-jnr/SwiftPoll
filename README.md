@@ -2,7 +2,7 @@
 
 Create and share polls in seconds. 
 
-![SwiftPoll preview](docs/images/Screenshot%202026-03-10%20at%2023.20.58.png)
+![SwiftPoll preview](docs/images/Screenshot%202026-03-15%20at%2023.16.21.png)
 
 ![SwiftPoll preview](docs/images/Screenshot%202026-03-10%20at%2023.21.43.png)
 
