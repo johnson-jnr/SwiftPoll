@@ -7,18 +7,35 @@ import {
     CardTitle,
 } from '@/components/shadcn/card';
 import { Button } from '@/components/shadcn/button';
-import { ArrowLeft, Link as LinkIcon, Check } from 'lucide-react';
+import { ArrowLeft, Link as LinkIcon, Check, Radio } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import { useTitle } from '@/hooks/useTitle';
 import { Separator } from '@radix-ui/react-dropdown-menu';
 import { format } from 'timeago.js';
 import { POLL_PALETTE } from '@/lib/pollColors';
 import PollPieChart from '@/components/PollPieChart';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const PollResult = ({ public_id, poll }) => {
     const author = poll.user ? `user #${poll.user.username}` : 'a guest';
     const [copied, setCopied] = useState(false);
+    const [options, setOptions] = useState(poll.options);
+    const [totalVote, setTotalVote] = useState(poll.total_vote);
+
+    useEffect(() => {
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const ws = new WebSocket(
+            `${protocol}://${window.location.host}/ws/poll/${public_id}/`,
+        );
+
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            setOptions(data.options);
+            setTotalVote(data.total_votes);
+        };
+
+        return () => ws.close();
+    }, [public_id]);
 
     function copyLink() {
         navigator.clipboard.writeText(window.location.href);
@@ -30,6 +47,12 @@ const PollResult = ({ public_id, poll }) => {
 
     return (
         <div className="max-w-4xl mx-auto mt-8 sm:mt-20 px-4 sm:px-0">
+            <div className="flex justify-end mb-4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-300 bg-green-50 text-green-600 text-sm font-medium">
+                    <Radio className="size-4" />
+                    Live results
+                </div>
+            </div>
             <Card>
                 <CardHeader className="relative z-10">
                     <div>
@@ -43,7 +66,7 @@ const PollResult = ({ public_id, poll }) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                         {/* Left: progress bars */}
                         <div className="space-y-5">
-                            {poll.options.map(
+                            {options.map(
                                 (
                                     option: {
                                         id: number;
@@ -53,9 +76,8 @@ const PollResult = ({ public_id, poll }) => {
                                     i: number,
                                 ) => {
                                     const pct =
-                                        poll.total_vote > 0
-                                            ? (option.vote_count /
-                                                  poll.total_vote) *
+                                        totalVote > 0
+                                            ? (option.vote_count / totalVote) *
                                               100
                                             : 0;
                                     const color =
@@ -90,15 +112,15 @@ const PollResult = ({ public_id, poll }) => {
                             )}
                             <Separator />
                             <p className="text-sm text-muted-foreground">
-                                Total votes: {poll.total_vote}
+                                Total votes: {totalVote}
                             </p>
                         </div>
 
                         {/* Right: pie chart — pulled up to visually center on full card height */}
                         <div className="relative sm:-top-24">
                             <PollPieChart
-                                options={poll.options}
-                                totalVotes={poll.total_vote}
+                                options={options}
+                                totalVotes={totalVote}
                             />
                         </div>
                     </div>

@@ -23,8 +23,9 @@ node_modules/
 # Virtual environments
 .venv
 
-# Notes
+# MD files
 note.md
+claude.md
 
 # VS Code
 .vscode/

@@ -44,6 +44,7 @@ SITE_ID = 1
 
 # Application definition
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     "polls",
     "accounts",
     # Third party
+    "channels",
     "anymail",
     "django_vite",
     "inertia",
@@ -96,6 +98,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "simple-poll.wsgi.application"
+ASGI_APPLICATION = "simple-poll.asgi.application"
 
 
 # Database
@@ -239,6 +242,12 @@ INERTIA_JSON_ENCODER = inertia_settings.INERTIA_JSON_ENCODER
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
 
 
 # http://whitenoise.evans.io/en/stable/django.html#WHITENOISE_IMMUTABLE_FILE_TEST

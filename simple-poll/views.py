@@ -2,6 +2,9 @@ import hashlib
 import hmac
 import json
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 from django.conf import settings
 from django.db import IntegrityError
 from inertia import render
@@ -113,6 +116,26 @@ def vote(request, public_id):
                     option=form.cleaned_data["option"],
                     hashed_ip_address=hashed_ip,
                 )
+
+                # send updated vote counts to all clients viewing this poll
+                options = list(
+                    poll.options.annotate(vote_count=Count("vote"))
+                    .values("id", "text", "vote_count")
+                    .order_by("-vote_count")
+                )
+                total_votes = sum(option["vote_count"] for option in options)
+                channel_layer = get_channel_layer()
+                async_to_sync(channel_layer.group_send)(
+                    f"poll_{public_id}",
+                    {
+                        "type": "poll_update",
+                        "data": {
+                            "total_votes": total_votes,
+                            "options": options,
+                        },
+                    },
+                )
+
                 return redirect("poll_detail", public_id=public_id)
             except IntegrityError:
                 request.session["errors"] = {
