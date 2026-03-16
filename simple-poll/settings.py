@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "polls",
     "accounts",
     # Third party
+    "django_celery_beat",
     "channels",
     "anymail",
     "django_vite",
@@ -247,6 +248,17 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
+}
+
+# Celery
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE = {
+    "check-poll-schedules-every-minute": {
+        "task": "polls.tasks.check_poll_schedules",
+        "schedule": 60.0,  # every 60 seconds
+    },
 }
 
 
