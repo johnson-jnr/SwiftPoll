@@ -22,7 +22,8 @@ class Poll(models.Model):
     end_date = models.DateTimeField(blank=True, null=True)
 
     # settings
-    active = models.BooleanField(default=True)
+    is_draft = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
     allow_one_vote_per_ip = models.BooleanField(default=True)
     allow_public_results = models.BooleanField(default=True)
 

@@ -40,11 +40,20 @@ def home(request):
         if form.is_valid():
             options = [o.strip() for o in data.get("options", []) if o.strip()]
             user = request.user if request.user.is_authenticated else None
+            is_draft = form.cleaned_data["is_draft"]
+            start_date = form.cleaned_data["start_date"]
+
+            # go live immediately if published and no start date scheduled
+            active = not is_draft and start_date is None
+
             poll = Poll.objects.create(
                 title=form.cleaned_data["title"],
                 description=form.cleaned_data["description"],
                 allow_public_results=form.cleaned_data["allow_public_results"],
-                active=form.cleaned_data["active"],
+                is_draft=is_draft,
+                start_date=start_date,
+                end_date=form.cleaned_data["end_date"],
+                active=active,
                 user=user,
             )
 
@@ -325,7 +334,6 @@ def poll_settings(request, public_id):
         data = json.loads(request.body)
         form = PollSettingsForm(data=data)
         if form.is_valid():
-            poll.active = form.cleaned_data["active"]
             poll.allow_one_vote_per_ip = form.cleaned_data["allow_one_vote_per_ip"]
             poll.allow_public_results = form.cleaned_data["allow_public_results"]
             poll.save()
@@ -345,6 +353,7 @@ def dashboard(request):
             "title",
             "description",
             "active",
+            "is_draft",
             "public_id",
             "created_at",
             "allow_public_results",

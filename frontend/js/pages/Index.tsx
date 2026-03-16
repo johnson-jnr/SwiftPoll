@@ -9,17 +9,30 @@ import { Switch } from '@/components/shadcn/switch';
 import { Label } from '@/components/shadcn/label';
 import { Field, FieldLabel, FieldError } from '@/components/shadcn/field';
 import { Card, CardContent } from '@/components/shadcn/card';
+import { DatePickerTime } from '@/components/DatePickerTime';
+import { addMonths } from 'date-fns';
+
 export default function Index() {
     const { data, setData, post, processing, errors, setError, clearErrors } =
-        useForm({
+        useForm<{
+            title: string;
+            description: string;
+            options: string[];
+            allow_public_results: boolean;
+            is_draft: boolean;
+            start_date: Date | undefined;
+            end_date: Date | undefined;
+        }>({
             title: '',
             description: '',
             options: ['', ''] as string[],
-            allow_public_results: true,
-            active: true,
+            allow_public_results: false,
+            is_draft: true,
+            start_date: undefined,
+            end_date: undefined,
         });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const filled = data.options.filter((option) => option.trim());
         if (!filled.length) {
@@ -33,7 +46,7 @@ export default function Index() {
     useTitle('Create a Poll');
 
     return (
-        <div className="max-w-xl mx-auto mt-8 px-4 sm:px-0">
+        <div className="max-w-xl mx-auto mt-8 px-4 sm:px-0 py-5">
             <h1 className="text-xl sm:text-2xl font-semibold mb-4">
                 Create a Poll
             </h1>
@@ -84,13 +97,39 @@ export default function Index() {
                 </Card>
 
                 <Card>
-                    <CardContent className="flex flex-col gap-4 pt-6">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="active">Poll Active</Label>
+                    <CardContent className="flex flex-col gap-6 pt-6">
+                        <DatePickerTime
+                            label="Start Date (optional)"
+                            hint="A poll can be scheduled a maximum of 6 months from now."
+                            description="The date and time the poll opens and starts accepting responses."
+                            error={errors.start_date}
+                            value={data.start_date}
+                            onChange={(v) => setData('start_date', v)}
+                            minDate={new Date()}
+                            maxDate={addMonths(new Date(), 6)}
+                        />
+                        <DatePickerTime
+                            label="End Date (optional)"
+                            description="The date and time the poll closes and stops accepting responses."
+                            error={errors.end_date}
+                            value={data.end_date}
+                            onChange={(v) => setData('end_date', v)}
+                            minDate={new Date()}
+                            maxDate={addMonths(new Date(), 12)}
+                        />
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="flex flex-col gap-6 pt-6">
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex flex-col gap-1">
+                                <Label htmlFor="active">Publish Poll</Label>
+                            </div>
                             <Switch
                                 id="active"
-                                checked={data.active}
-                                onCheckedChange={(v) => setData('active', v)}
+                                checked={!data.is_draft}
+                                onCheckedChange={(v) => setData('is_draft', !v)}
                             />
                         </div>
                         <div className="flex items-center justify-between">
