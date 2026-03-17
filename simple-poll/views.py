@@ -6,6 +6,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from django.conf import settings
+from django.utils import timezone
 from django.db import IntegrityError
 from inertia import render
 from django.shortcuts import get_object_or_404, redirect
@@ -43,8 +44,11 @@ def home(request):
             is_draft = form.cleaned_data["is_draft"]
             start_date = form.cleaned_data["start_date"]
 
-            # go live immediately if published and no start date scheduled
-            active = not is_draft and start_date is None
+            # default start_date to now if publishing without a schedule
+            if not is_draft and start_date is None:
+                start_date = timezone.now()
+
+            active = not is_draft and start_date <= timezone.now() if start_date else False
 
             poll = Poll.objects.create(
                 title=form.cleaned_data["title"],
@@ -334,8 +338,33 @@ def poll_settings(request, public_id):
         data = json.loads(request.body)
         form = PollSettingsForm(data=data)
         if form.is_valid():
+            now = timezone.now()
+            is_draft = form.cleaned_data["is_draft"]
+
+            poll.is_draft = is_draft
             poll.allow_one_vote_per_ip = form.cleaned_data["allow_one_vote_per_ip"]
             poll.allow_public_results = form.cleaned_data["allow_public_results"]
+            poll.end_date = form.cleaned_data["end_date"]
+
+            # Only update start_date if the poll hasn't started yet
+            new_start_date = form.cleaned_data["start_date"]
+            poll_has_started = poll.start_date is not None and poll.start_date <= now
+            if not poll_has_started:
+                # default to now if publishing without a schedule
+                if not is_draft and new_start_date is None:
+                    poll.start_date = now
+                else:
+                    poll.start_date = new_start_date
+
+            if is_draft:
+                poll.active = False
+            elif poll.start_date and poll.start_date > now:
+                # future schedule — Celery activates when the time comes
+                poll.active = False
+            else:
+                # published with no upcoming schedule — go live or stay live
+                poll.active = True
+
             poll.save()
             messages.success(request, "Poll settings updated successfully.")
         else:
@@ -354,6 +383,8 @@ def dashboard(request):
             "description",
             "active",
             "is_draft",
+            "start_date",
+            "end_date",
             "public_id",
             "created_at",
             "allow_public_results",

@@ -28,9 +28,10 @@ interface DatePickerTimeProps {
     onChange: (date: Date | undefined) => void;
     minDate?: Date;
     maxDate?: Date;
+    disabled?: boolean;
 }
 
-export function DatePickerTime({ label, hint, description, error, value, onChange, minDate, maxDate }: DatePickerTimeProps) {
+export function DatePickerTime({ label, hint, description, error, value, onChange, minDate, maxDate, disabled }: DatePickerTimeProps) {
     const [open, setOpen] = React.useState(false);
 
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,12 +53,12 @@ export function DatePickerTime({ label, hint, description, error, value, onChang
                 <FieldLabel className="flex items-center gap-1">
                     {label}
                     {description && (
-                        <TooltipProvider>
+                        <TooltipProvider delayDuration={200}>
                             <Tooltip>
-                                <TooltipTrigger type="button">
+                                <TooltipTrigger type="button" tabIndex={-1}>
                                     <InfoIcon className="size-3.5 text-muted-foreground" />
                                 </TooltipTrigger>
-                                <TooltipContent>{description}</TooltipContent>
+                                <TooltipContent className="whitespace-pre-line">{description}</TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                     )}
@@ -68,6 +69,7 @@ export function DatePickerTime({ label, hint, description, error, value, onChang
                             type="button"
                             variant="outline"
                             className="w-32 justify-between font-normal"
+                            disabled={disabled}
                         >
                             {value ? format(value, 'PPP') : 'Select date'}
                             <ChevronDownIcon />
@@ -106,6 +108,7 @@ export function DatePickerTime({ label, hint, description, error, value, onChang
                     type="time"
                     value={timeValue}
                     onChange={handleTimeChange}
+                    disabled={disabled}
                     className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                 />
             </Field>

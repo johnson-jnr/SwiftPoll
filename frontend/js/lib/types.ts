@@ -8,6 +8,9 @@ export interface Poll {
     title: string;
     description: string;
     active: boolean;
+    is_draft: boolean;
+    start_date: string | null;
+    end_date: string | null;
     created_at: string;
     total_vote: number;
     public_id: string;

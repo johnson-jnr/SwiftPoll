@@ -100,8 +100,7 @@ export default function Index() {
                     <CardContent className="flex flex-col gap-6 pt-6">
                         <DatePickerTime
                             label="Start Date (optional)"
-                            hint="A poll can be scheduled a maximum of 6 months from now."
-                            description="The date and time the poll opens and starts accepting responses."
+                            description={`The date and time the poll opens and starts accepting responses.\nA poll start date can be scheduled a maximum of 6 months from now.`}
                             error={errors.start_date}
                             value={data.start_date}
                             onChange={(v) => setData('start_date', v)}

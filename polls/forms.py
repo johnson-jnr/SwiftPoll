@@ -35,6 +35,17 @@ class PollVoteForm(forms.Form):
 
 
 class PollSettingsForm(forms.ModelForm):
+    start_date = forms.DateTimeField(input_formats=ISO_DATETIME_FORMATS, required=False)
+    end_date = forms.DateTimeField(input_formats=ISO_DATETIME_FORMATS, required=False)
+
     class Meta:
         model = Poll
-        fields = ["allow_one_vote_per_ip", "allow_public_results"]
+        fields = ["is_draft", "allow_one_vote_per_ip", "allow_public_results", "start_date", "end_date"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+        if start_date and end_date and end_date <= start_date:
+            self.add_error("end_date", "End date must be after start date.")
+        return cleaned_data

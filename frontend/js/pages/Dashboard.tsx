@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
+import { addMonths } from 'date-fns';
+import { DatePickerTime } from '@/components/DatePickerTime';
 import { format } from 'timeago.js';
 import {
     Table,
@@ -36,12 +38,26 @@ import { Spinner } from '@/components/shadcn/spinner';
 
 const PollDialog = ({ poll }: { poll: Poll }) => {
     const [open, setOpen] = useState(false);
-    const { data, setData, errors, put, processing } = useForm({
+    const { data, setData, errors, put, processing } = useForm<{
+        id: number | undefined;
+        is_draft: boolean;
+        allow_one_vote_per_ip: boolean;
+        allow_public_results: boolean;
+        start_date: Date | undefined;
+        end_date: Date | undefined;
+    }>({
         id: poll.id,
-        active: poll.active,
+        is_draft: poll.is_draft,
         allow_one_vote_per_ip: poll.allow_one_vote_per_ip,
         allow_public_results: poll.allow_public_results,
+        start_date: poll.start_date ? new Date(poll.start_date) : undefined,
+        end_date: poll.end_date ? new Date(poll.end_date) : undefined,
     });
+
+    const now = new Date();
+    const isStartDisabled =
+        !!poll.start_date && new Date(poll.start_date) <= now;
+    const isEndDisabled = !!poll.end_date && new Date(poll.end_date) <= now;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -70,21 +86,36 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                         {poll.description}
                     </p>
                     <div className="flex flex-col gap-4 py-2 my-4">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor={`active-${poll.title}`}>
-                                Poll Active
-                            </Label>
-                            <Switch
-                                id={`active-${poll.title}`}
-                                checked={data.active}
-                                onCheckedChange={(v) => setData('active', v)}
-                            />
-                            {errors.active && (
-                                <div className="mt-1 text-xs text-red-400 whitespace-pre-line">
-                                    {errors.active}
-                                </div>
-                            )}
-                        </div>
+                        <DatePickerTime
+                            label="Start Date"
+                            hint={
+                                isStartDisabled
+                                    ? "Poll already started, field can't be updated."
+                                    : undefined
+                            }
+                            description={`The date and time the poll opens and starts accepting responses.\nA poll start date can be scheduled a maximum of 6 months from now.`}
+                            error={errors.start_date}
+                            value={data.start_date}
+                            onChange={(v) => setData('start_date', v)}
+                            minDate={new Date()}
+                            maxDate={addMonths(new Date(), 6)}
+                            disabled={isStartDisabled}
+                        />
+                        <DatePickerTime
+                            label="End Date"
+                            hint={
+                                isEndDisabled
+                                    ? "Poll already ended, field can't be updated."
+                                    : undefined
+                            }
+                            description="The date and time the poll closes and stops accepting responses."
+                            error={errors.end_date}
+                            value={data.end_date}
+                            onChange={(v) => setData('end_date', v)}
+                            minDate={new Date()}
+                            maxDate={addMonths(new Date(), 12)}
+                            disabled={isEndDisabled}
+                        />
                         {/* <div className="flex items-center justify-between">
                             <Label htmlFor={`ip-${poll.title}`}>
                                 Allow only one vote per IP-Address
@@ -102,6 +133,23 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                                 </div>
                             )}
                         </div> */}
+
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor={`is_draft-${poll.title}`}>
+                                Publish Poll
+                            </Label>
+                            <Switch
+                                id={`is_draft-${poll.title}`}
+                                checked={!data.is_draft}
+                                onCheckedChange={(v) => setData('is_draft', !v)}
+                            />
+                            {errors.is_draft && (
+                                <div className="mt-1 text-xs text-red-400 whitespace-pre-line">
+                                    {errors.is_draft}
+                                </div>
+                            )}
+                        </div>
+
                         <div className="flex items-center justify-between">
                             <Label htmlFor={`results-${poll.title}`}>
                                 Allow public to view results
@@ -151,7 +199,7 @@ const Dashboard = ({
             description: 'Total number of polls you have created',
         },
         {
-            title: 'Active Polls',
+            title: 'Live Polls',
             value: polls.filter((p) => p.active).length,
             description: 'Polls currently accepting responses',
         },
@@ -203,9 +251,13 @@ const Dashboard = ({
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Title</TableHead>
-                                    <TableHead>Active</TableHead>
+                                    <TableHead>Draft</TableHead>
                                     <TableHead>Date Created</TableHead>
+                                    <TableHead>Start Date</TableHead>
+                                    <TableHead>End Date</TableHead>
                                     <TableHead>Number of Votes</TableHead>
+                                    <TableHead>Live</TableHead>
+
                                     <TableHead></TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -217,13 +269,32 @@ const Dashboard = ({
                                                 {poll.title}
                                             </span>
                                         </TableCell>
+
                                         <TableCell>
-                                            {poll.active ? 'Yes' : 'No'}
+                                            {poll.is_draft ? 'Yes' : 'No'}
                                         </TableCell>
+
                                         <TableCell>
                                             {format(poll.created_at)}
                                         </TableCell>
+
+                                        <TableCell>
+                                            {poll.start_date
+                                                ? format(poll.start_date)
+                                                : '—'}
+                                        </TableCell>
+                                        <TableCell>
+                                            {poll.end_date
+                                                ? format(poll.end_date)
+                                                : '—'}
+                                        </TableCell>
+
                                         <TableCell>{poll.total_vote}</TableCell>
+
+                                        <TableCell>
+                                            {poll.active ? 'Yes' : 'No'}
+                                        </TableCell>
+
                                         <TableCell>
                                             <div className="flex items-center gap-2">
                                                 <Button
@@ -262,7 +333,7 @@ const Dashboard = ({
                                                         />
                                                     </a>
                                                 </Button>
-                                                <PollDialog poll={poll} />
+                                                <PollDialog key={`${poll.public_id}-${poll.start_date}-${poll.end_date}-${poll.is_draft}`} poll={poll} />
                                             </div>
                                         </TableCell>
                                     </TableRow>
