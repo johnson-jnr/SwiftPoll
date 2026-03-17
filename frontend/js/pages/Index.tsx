@@ -100,7 +100,8 @@ export default function Index() {
                     <CardContent className="flex flex-col gap-6 pt-6">
                         <DatePickerTime
                             label="Start Date (optional)"
-                            description={`The date and time the poll opens and starts accepting responses.\nA poll start date can be scheduled a maximum of 6 months from now.`}
+                            defaultToCurrentTime
+                            description={`The date and time the poll opens and starts accepting responses.\nA poll start date can be scheduled a maximum of 6 months from now.\nNo start date means the poll goes live immediately if published.`}
                             error={errors.start_date}
                             value={data.start_date}
                             onChange={(v) => setData('start_date', v)}
@@ -109,7 +110,9 @@ export default function Index() {
                         />
                         <DatePickerTime
                             label="End Date (optional)"
-                            description="The date and time the poll closes and stops accepting responses."
+                            description={
+                                'The date and time the poll closes and stops accepting responses. \nNo end date means the poll runs indefinitely.'
+                            }
                             error={errors.end_date}
                             value={data.end_date}
                             onChange={(v) => setData('end_date', v)}

@@ -48,7 +48,9 @@ def home(request):
             if not is_draft and start_date is None:
                 start_date = timezone.now()
 
-            active = not is_draft and start_date <= timezone.now() if start_date else False
+            active = (
+                not is_draft and start_date <= timezone.now() if start_date else False
+            )
 
             poll = Poll.objects.create(
                 title=form.cleaned_data["title"],
@@ -67,7 +69,8 @@ def home(request):
             messages.success(request, "Poll created successfully!")
             return redirect("poll_detail", public_id=poll.public_id)
         else:
-            return render(request, "Index", {"errors": form.errors})
+            errors = {k: "\n".join(v) for k, v in form.errors.items()}
+            return render(request, "Index", {"errors": errors})
     return render(request, "Index")
 
 
@@ -336,19 +339,30 @@ def poll_settings(request, public_id):
     if request.method == "PUT":
         poll = get_object_or_404(Poll, public_id=public_id)
         data = json.loads(request.body)
+        now = timezone.now()
+        poll_has_started = poll.start_date is not None and poll.start_date <= now
+        poll_has_ended = poll.end_date is not None and poll.end_date <= now
+
+        # strip past dates for live polls so validation can run successfully.
+        if poll_has_started and not poll.is_draft:
+            data = {**data, "start_date": None}
+        if poll_has_ended and not poll.is_draft:
+            data = {**data, "end_date": None}
+
         form = PollSettingsForm(data=data)
         if form.is_valid():
-            now = timezone.now()
             is_draft = form.cleaned_data["is_draft"]
 
             poll.is_draft = is_draft
             poll.allow_one_vote_per_ip = form.cleaned_data["allow_one_vote_per_ip"]
             poll.allow_public_results = form.cleaned_data["allow_public_results"]
-            poll.end_date = form.cleaned_data["end_date"]
+
+            # Only update end_date if the poll hasn't ended yet
+            if not poll_has_ended:
+                poll.end_date = form.cleaned_data["end_date"]
 
             # Only update start_date if the poll hasn't started yet
             new_start_date = form.cleaned_data["start_date"]
-            poll_has_started = poll.start_date is not None and poll.start_date <= now
             if not poll_has_started:
                 # default to now if publishing without a schedule
                 if not is_draft and new_start_date is None:
@@ -368,8 +382,10 @@ def poll_settings(request, public_id):
             poll.save()
             messages.success(request, "Poll settings updated successfully.")
         else:
-            errors = {k: "\n".join(v) for k, v in form.errors.items()}
-            return render(request, "Dashborad", {"errors": errors})
+            request.session["errors"] = {
+                k: "\n".join(v) for k, v in form.errors.items()
+            }
+            return redirect("dashboard")
     return redirect("dashboard")
 
 
@@ -394,4 +410,9 @@ def dashboard(request):
         .order_by("-created_at")
     )
     total_votes = sum(poll["total_vote"] for poll in polls)
-    return render(request, "Dashboard", {"polls": polls, "total_votes": total_votes})
+    errors = request.session.pop("errors", {})
+    return render(
+        request,
+        "Dashboard",
+        {"polls": polls, "total_votes": total_votes, "errors": errors},
+    )

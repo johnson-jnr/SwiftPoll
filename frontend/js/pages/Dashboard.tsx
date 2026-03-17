@@ -38,7 +38,7 @@ import { Spinner } from '@/components/shadcn/spinner';
 
 const PollDialog = ({ poll }: { poll: Poll }) => {
     const [open, setOpen] = useState(false);
-    const { data, setData, errors, put, processing } = useForm<{
+    const { data, setData, clearErrors, errors, put, processing } = useForm<{
         id: number | undefined;
         is_draft: boolean;
         allow_one_vote_per_ip: boolean;
@@ -56,8 +56,9 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
 
     const now = new Date();
     const isStartDisabled =
-        !!poll.start_date && new Date(poll.start_date) <= now;
-    const isEndDisabled = !!poll.end_date && new Date(poll.end_date) <= now;
+        !poll.is_draft && !!poll.start_date && new Date(poll.start_date) <= now;
+    const isEndDisabled =
+        !poll.is_draft && !!poll.end_date && new Date(poll.end_date) <= now;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -88,12 +89,13 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                     <div className="flex flex-col gap-4 py-2 my-4">
                         <DatePickerTime
                             label="Start Date"
+                            defaultToCurrentTime
                             hint={
                                 isStartDisabled
                                     ? "Poll already started, field can't be updated."
                                     : undefined
                             }
-                            description={`The date and time the poll opens and starts accepting responses.\nA poll start date can be scheduled a maximum of 6 months from now.`}
+                            description={`The date and time the poll opens and starts accepting responses.\nA poll start date can be scheduled a maximum of 6 months from now.\nNo start date means the poll goes live immediately if published.`}
                             error={errors.start_date}
                             value={data.start_date}
                             onChange={(v) => setData('start_date', v)}
@@ -108,7 +110,9 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                                     ? "Poll already ended, field can't be updated."
                                     : undefined
                             }
-                            description="The date and time the poll closes and stops accepting responses."
+                            description={
+                                'The date and time the poll closes and stops accepting responses. \nNo end date means the poll runs indefinitely.'
+                            }
                             error={errors.end_date}
                             value={data.end_date}
                             onChange={(v) => setData('end_date', v)}
@@ -170,7 +174,7 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                     </div>
                     <DialogFooter className="gap-1">
                         <DialogClose asChild>
-                            <Button variant="outline" type="button">
+                            <Button variant="outline" type="button" onClick={() => clearErrors()}>
                                 Cancel
                             </Button>
                         </DialogClose>
@@ -333,7 +337,10 @@ const Dashboard = ({
                                                         />
                                                     </a>
                                                 </Button>
-                                                <PollDialog key={`${poll.public_id}-${poll.start_date}-${poll.end_date}-${poll.is_draft}`} poll={poll} />
+                                                <PollDialog
+                                                    key={`${poll.public_id}-${poll.start_date}-${poll.end_date}-${poll.is_draft}`}
+                                                    poll={poll}
+                                                />
                                             </div>
                                         </TableCell>
                                     </TableRow>

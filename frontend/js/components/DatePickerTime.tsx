@@ -29,6 +29,7 @@ interface DatePickerTimeProps {
     minDate?: Date;
     maxDate?: Date;
     disabled?: boolean;
+    defaultToCurrentTime?: boolean;
 }
 
 export function DatePickerTime({
@@ -41,6 +42,7 @@ export function DatePickerTime({
     minDate,
     maxDate,
     disabled,
+    defaultToCurrentTime,
 }: DatePickerTimeProps) {
     const [open, setOpen] = React.useState(false);
 
@@ -68,7 +70,7 @@ export function DatePickerTime({
                                     <TooltipTrigger type="button" tabIndex={-1}>
                                         <InfoIcon className="size-3.5 text-muted-foreground" />
                                     </TooltipTrigger>
-                                    <TooltipContent className="whitespace-pre-line">
+                                    <TooltipContent className="whitespace-pre-line leading-relaxed px-3 py-2">
                                         {description}
                                     </TooltipContent>
                                 </Tooltip>
@@ -103,12 +105,13 @@ export function DatePickerTime({
                                     if (!date) {
                                         onChange(undefined);
                                     } else {
+                                        const now = new Date();
                                         const hours = value
                                             ? value.getHours()
-                                            : 0;
+                                            : defaultToCurrentTime ? now.getHours() : 0;
                                         const minutes = value
                                             ? value.getMinutes()
-                                            : 0;
+                                            : defaultToCurrentTime ? now.getMinutes() : 0;
                                         date.setHours(hours, minutes, 0, 0);
                                         onChange(date);
                                     }
@@ -130,7 +133,7 @@ export function DatePickerTime({
                 </Field>
             </FieldGroup>
             {hint && <p className="text-muted-foreground text-xs">{hint}</p>}
-            {error && <p className="text-destructive text-sm">{error}</p>}
+            {error && <p className="text-destructive text-sm whitespace-pre-line">{error}</p>}
         </div>
     );
 }
