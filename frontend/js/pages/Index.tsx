@@ -46,7 +46,7 @@ export default function Index() {
     useTitle('Create a Poll');
 
     return (
-        <div className="max-w-xl mx-auto mt-8 px-4 sm:px-0 py-5">
+        <div className="max-w-xl mx-auto mt-8 px-4 sm:px-0 xl:py-5">
             <h1 className="text-xl sm:text-2xl font-semibold mb-4">
                 Create a Poll
             </h1>

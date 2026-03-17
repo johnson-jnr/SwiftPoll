@@ -11,7 +11,7 @@ import {
     PopoverTrigger,
 } from '@/components/shadcn/popover';
 import { format } from 'date-fns';
-import { ChevronDownIcon, InfoIcon } from 'lucide-react';
+import { ChevronDownIcon, InfoIcon, XIcon } from 'lucide-react';
 import {
     Tooltip,
     TooltipContent,
@@ -62,19 +62,30 @@ export function DatePickerTime({
         <div className="flex flex-col gap-1">
             <FieldGroup className="sm:flex-row">
                 <Field className="sm:max-w-1/2">
-                    <FieldLabel className="flex items-center gap-1">
-                        {label}
-                        {description && (
-                            <TooltipProvider delayDuration={200}>
-                                <Tooltip>
-                                    <TooltipTrigger type="button" tabIndex={-1}>
-                                        <InfoIcon className="size-3.5 text-muted-foreground" />
-                                    </TooltipTrigger>
-                                    <TooltipContent className="whitespace-pre-line leading-relaxed px-3 py-2">
-                                        {description}
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
+                    <FieldLabel className="flex items-center justify-between w-full">
+                        <span className="flex items-center gap-1">
+                            {label}
+                            {description && (
+                                <TooltipProvider delayDuration={200}>
+                                    <Tooltip>
+                                        <TooltipTrigger type="button" tabIndex={-1}>
+                                            <InfoIcon className="size-3.5 text-muted-foreground" />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="whitespace-pre-line leading-relaxed px-3 py-2">
+                                            {description}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            )}
+                        </span>
+                        {value && !disabled && (
+                            <button
+                                type="button"
+                                onClick={() => onChange(undefined)}
+                                className="sm:hidden text-muted-foreground hover:text-foreground hover:bg-accent rounded-full p-1 transition-colors"
+                            >
+                                <XIcon className="size-4" />
+                            </button>
                         )}
                     </FieldLabel>
                     <Popover open={open} onOpenChange={setOpen}>
@@ -123,13 +134,24 @@ export function DatePickerTime({
                 </Field>
                 <Field className="sm:max-w-1/2">
                     <FieldLabel>Time</FieldLabel>
-                    <Input
-                        type="time"
-                        value={timeValue}
-                        onChange={handleTimeChange}
-                        disabled={disabled}
-                        className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                    />
+                    <div className="flex items-center gap-1">
+                        <Input
+                            type="time"
+                            value={timeValue}
+                            onChange={handleTimeChange}
+                            disabled={disabled}
+                            className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                        />
+                        {value && !disabled && (
+                            <button
+                                type="button"
+                                onClick={() => onChange(undefined)}
+                                className="hidden sm:inline-flex text-muted-foreground hover:text-foreground hover:bg-accent rounded-full p-1 transition-colors"
+                            >
+                                <XIcon className="size-4" />
+                            </button>
+                        )}
+                    </div>
                 </Field>
             </FieldGroup>
             {hint && <p className="text-muted-foreground text-xs">{hint}</p>}

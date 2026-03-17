@@ -78,7 +78,7 @@ const PollDialog = ({ poll }: { poll: Poll }) => {
                     Settings
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent hideClose>
                 <form onSubmit={handleSubmit}>
                     <DialogHeader>
                         <DialogTitle>{poll.title}</DialogTitle>
