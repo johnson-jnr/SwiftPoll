@@ -2,11 +2,14 @@
 
 Create and share polls in seconds. 
 
-![SwiftPoll preview](docs/images/Screenshot%202026-03-15%20at%2023.16.21.png)
+<img src="docs/images/Screenshot%202026-03-15%20at%2023.16.21.png" width="100%">
 
-![SwiftPoll preview](docs/images/Screenshot%202026-03-20%20at%2008.07.04.png)
-
-![SwiftPoll preview](docs/images/Screenshot%202026-03-20%20at%2008.34.19.png)
+<table>
+  <tr>
+    <td><img src="docs/images/Screenshot%202026-03-20%20at%2008.07.04.png" width="100%"></td>
+    <td><img src="docs/images/Screenshot%202026-03-20%20at%2008.34.19.png" width="100%"></td>
+  </tr>
+</table>
 
 ---
 
