@@ -17,20 +17,26 @@ Create and share polls in seconds.
 
 - **Create polls instantly** — Build a poll with a title, description, and as many options as you need, then share it with a single link.
 - **One vote per IP** — Protection ensures each person only votes once, keeping results fair without requiring accounts.
-- **Public results** — Toggle whether results should be visible to voters after they cast their vote and access result with a live chart breakdown.
-- **User dashboard** — Sign in to manage all your polls in one place — view responses, toggle poll settings, and track activity over time.
+- **Live results** — Vote counts update in real time for everyone viewing the poll simultaneously, powered by WebSockets and Django Channels.
+- **Public results** — Toggle whether results should be visible to voters after they cast their vote, with a live chart breakdown.
+- **Scheduled polls** — Set a start and end date for your poll. It will automatically go live and close at the specified times.
+- **Authentication** — Sign in with email/password or Google to manage your polls.
+- **User dashboard** — Manage all your polls in one place — view responses, update poll settings, and track poll details.
 
 ---
 
 ## Technologies
 
-| Layer          | Technology                       |
-| :------------- | :----------------------          |
-| **Backend**    | Python, Django                   |
-| **Frontend**   | TypeScript, React, Inertia.js    |
-| **Styling**    | Tailwind, Shadcn/ui              |
-| **Database**   | PostgreSQL                       |
-| **Email**      | Resend                           |
+| Layer              | Technology                         |
+| :----------------- | :--------------------------------- |
+| **Backend**        | Python, Django                     |
+| **Real-time**      | Django Channels, WebSockets        |
+| **Task Queue**     | Celery, Celery Beat                |
+| **Broker/Cache**   | Redis                              |
+| **Frontend**       | TypeScript, React, Inertia.js      |
+| **Styling**        | Tailwind, Shadcn/ui                |
+| **Database**       | PostgreSQL                         |
+| **Email**          | Resend                             |
 
 ---
 
@@ -42,6 +48,7 @@ Create and share polls in seconds.
 - Node.js 24+
 - [uv](https://docs.astral.sh/uv/)
 - pnpm
+- Redis
 
 ### Installation
 
@@ -69,6 +76,18 @@ Create and share polls in seconds.
    ```
    ```bash
    pnpm dev
+   ```
+
+6. Ensure Redis is running. See the [Redis documentation](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/) for installation and startup instructions.
+
+7. Start the Celery worker (handles background tasks):
+   ```bash
+   uv run celery -A simple-poll worker -l info
+   ```
+
+8. Start the Celery Beat scheduler (handles scheduled poll activation/deactivation):
+   ```bash
+   uv run celery -A simple-poll beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
    ```
 
 ---
