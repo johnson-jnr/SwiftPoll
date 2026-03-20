@@ -6,8 +6,8 @@ Create and share polls in seconds.
 
 <table>
   <tr>
-    <td><img src="docs/images/Screenshot%202026-03-20%20at%2008.07.04.png" width="100%"></td>
-    <td><img src="docs/images/Screenshot%202026-03-20%20at%2008.34.19.png" width="100%"></td>
+    <td><img src="docs/images/Screenshot%202026-03-20%20at%2008.52.29.png" width="100%"></td>
+    <td><img src="docs/images/Screenshot%202026-03-20%20at%2008.54.48.png" width="100%"></td>
   </tr>
 </table>
 

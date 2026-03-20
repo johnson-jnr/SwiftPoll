@@ -63,7 +63,7 @@ export default function Index() {
                                 onChange={(e) =>
                                     setData('title', e.target.value)
                                 }
-                                placeholder="Type your Title"
+                                placeholder="Ask a question..."
                             />
                             <FieldError>{errors.title}</FieldError>
                         </Field>
@@ -79,7 +79,7 @@ export default function Index() {
                                 onChange={(e) =>
                                     setData('description', e.target.value)
                                 }
-                                placeholder="Type your Description"
+                                placeholder="Add some context for your voters (optional)"
                             />
                             <FieldError>{errors.description}</FieldError>
                         </Field>
